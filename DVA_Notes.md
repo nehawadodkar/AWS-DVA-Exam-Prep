@@ -196,3 +196,68 @@
 
 
 - **AWS SAM (Serverless Application Model)**: A framework to define, build, and deploy serverless applications using simplified templates for Lambda, API Gateway, DynamoDB, and other AWS resources.
+
+- # AWS Messaging & Streaming - DVA Exam Notes
+
+## 1. Amazon SQS (Simple Queue Service)
+- Fully managed message queue for **decoupling microservices, distributed systems, and serverless apps**.
+- **Queue types:**
+  - **Standard Queue:** at-least-once delivery, best-effort ordering, unlimited throughput.
+  - **FIFO Queue:** exactly-once processing, preserves order, limited throughput (up to 300 TPS with batching).
+- **Visibility timeout:** time during which a message is invisible after being received; prevents multiple consumers from processing it simultaneously.
+- **Dead-letter queue (DLQ):** stores messages that can’t be processed after multiple attempts.
+- **Long polling:** reduces empty responses and lowers cost by waiting for messages if none are immediately available.
+- **Key DVA points:** know **Standard vs FIFO**, DLQ, visibility timeout, long polling.
+
+---
+
+## 2. Amazon SNS (Simple Notification Service)
+- Fully managed **pub/sub messaging** service.
+- Sends messages to **multiple subscribers**: SQS queues, Lambda, HTTP/S endpoints, email, SMS.
+- **Fan-out pattern:** publish to SNS → multiple SQS queues/Lambda functions receive the message.
+- Supports **message filtering**: subscribers can filter messages based on attributes.
+- **Durability:** messages stored redundantly across multiple AZs.
+- **Key DVA points:** know **SNS → SQS fan-out**, delivery targets, message filtering, pub/sub pattern.
+
+---
+
+## 3. Amazon Kinesis
+### 3a. Kinesis Data Streams
+- Real-time streaming data ingestion for **analytics, processing, and storage**.
+- **Shards** determine capacity:
+  - 1 shard = 1 MB/sec write, 2 MB/sec read, 1,000 records/sec write.
+- Supports **ordering within a shard**.
+- Consumer applications can **read multiple times**; retention configurable (default 24h, up to 7 days).
+- **Key DVA points:** know shards, ordering, multiple consumers, real-time processing.
+
+### 3b. Kinesis Data Firehose
+- Fully managed **delivery service** to load streaming data into **S3, Redshift, Elasticsearch, or Splunk**.
+- Automatic **batching, compression, and format conversion**.
+- No need to write custom consumer code.
+- **Key DVA points:** know **Firehose = delivery/ETL**, vs Data Streams = custom processing.
+
+### 3c. Kinesis Data Analytics
+- Analyze **streaming data in real-time** using SQL or Apache Flink.
+- Connects to **Data Streams or Firehose** as input.
+- **Key DVA points:** real-time analytics without building custom apps.
+
+---
+
+## 4. Integration Patterns
+- **SNS → SQS:** decouple producers and consumers, fan-out pattern.
+- **Lambda → SQS/SNS:** serverless processing of messages/events.
+- **Kinesis → Lambda:** real-time processing of streaming data.
+- **DVA focus:** know which service is used for **queueing vs pub/sub vs streaming**.
+
+---
+
+## 5. Exam Memory Tips
+| Service | Pattern | Ordering | Delivery | Notes |
+|---------|--------|---------|---------|-------|
+| SQS Standard | Queue | Best-effort | At-least-once | High throughput |
+| SQS FIFO | Queue | Exactly | Exactly-once | Limited throughput, preserves order |
+| SNS | Pub/Sub | N/A | Push to subscribers | Fan-out to multiple SQS/Lambda |
+| Kinesis Data Streams | Streaming | Per shard | At-least-once | Real-time analytics |
+| Kinesis Firehose | Streaming → Storage | N/A | Automatic | ETL to S3/Redshift |
+| Kinesis Analytics | Analytics | N/A | N/A | SQL/Flink processing of streams |
+
