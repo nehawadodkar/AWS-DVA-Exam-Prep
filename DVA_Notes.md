@@ -309,3 +309,30 @@ Client
 - **Method = client-facing**  
 - **Integration = backend-facing**  
 - Think of it as **two translation layers** between client and backend.
+
+## DynamoDB Streams - DVA Exam Notes (Easy Version)
+
+- **What it is:** DynamoDB Streams is like a **“change tracker”** for your table.  
+  - It records **every insert, update, and delete** for 24 hours.  
+  - Useful for **real-time triggers** (Lambda), audits, or replication.
+
+---
+
+### Stream View Types (Super Simple)
+| Type | What you get | When to use / Remember |
+|------|-------------|-----------------------|
+| **KEYS_ONLY** | Only the **primary key** of the changed item | Lightweight, just to know “which item changed” |
+| **NEW_IMAGE** | The item **after the change** | Use when you need the **latest data** |
+| **OLD_IMAGE** | The item **before the change** | Use for **rollback or auditing** |
+| **NEW_AND_OLD_IMAGES** | Both **before & after** | Use when you want to **compare old vs new** |
+
+---
+
+### Memory Tricks
+- **Keys Only → Just the ID** (think: “I just want to know which item changed”)  
+- **New Image → Latest State** (think: “Give me the new version”)  
+- **Old Image → Previous State** (think: “Give me the old version”)  
+- **New + Old → Compare** (think: “Show me before AND after”)  
+
+💡 Easy Tip: Streams = **“What changed and when”**, pick the view type based on **what you want to see**.
+
