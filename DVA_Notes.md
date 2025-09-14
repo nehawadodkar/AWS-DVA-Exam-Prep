@@ -119,20 +119,72 @@
 
 ---
 
-## DynamoDB Capacity Units
+# DynamoDB - AWS DVA Exam Notes
 
-### Read Capacity Unit (RCU)
-- 1 RCU = 1 strongly consistent read/sec for item ≤4 KB.
-- Eventually consistent read = 0.5 RCU.
+## Basics
+- Fully managed NoSQL database.
+- Key-value and document data model.
+- Supports **Provisioned** and **On-Demand** capacity modes.
+- Global tables for multi-region replication.
+- Transactions supported (ACID).
+
+---
+
+## Capacity Units
+
+### 1. Read Capacity Unit (RCU)
+- 1 RCU = 1 strongly consistent read per second for **1 item ≤ 4 KB**.
+- Eventually consistent read = **0.5 RCU per read**.
 - **Formula:**
-  - Strongly consistent: `RCU = ⌈Item size (KB)/4⌉ × #reads/sec`
-  - Eventually consistent: `RCU = ⌈Item size (KB)/4⌉ × #reads/sec × 0.5`
-- **Example:** Item 6 KB, 10 strongly consistent reads/sec → RCU = 20
-- **Memory tip:** RCU → 4 KB per read; eventually consistent reads cost half.
+  - Strongly consistent: `RCU = ceil(ItemSizeKB / 4) * ReadPerSecond`
+  - Eventually consistent: `RCU = ceil(ItemSizeKB / 4) * ReadPerSecond * 0.5`
 
-### Write Capacity Unit (WCU)
-- 1 WCU = 1 write/sec for item ≤1 KB.
-- **Formula:** `WCU = ⌈Item size (KB)/1⌉ × #writes/sec`
-- **Example:** Item 3 KB, 5 writes/sec → WCU = 15
-- **Memory tip:** WCU → 1 KB per write; always round up partial KBs.
+**Example:**  
+- Item = 6 KB, 10 strongly consistent reads/sec  
+`RCU = ceil(6/4) * 10 = 2 * 10 = 20`
+
+### 2. Write Capacity Unit (WCU)
+- 1 WCU = 1 write per second for **1 item ≤ 1 KB**.
+- **Formula:** `WCU = ceil(ItemSizeKB / 1) * WritesPerSecond`
+
+**Example:**  
+- Item = 3 KB, 5 writes/sec  
+`WCU = ceil(3/1) * 5 = 3 * 5 = 15`
+
+---
+
+## Performance Tips
+- Use **Query** instead of Scan whenever possible.
+- **Partition key design** is critical for evenly distributed load.
+- Avoid hot partitions (high traffic to same partition key).
+- DynamoDB Accelerator (DAX) for caching.
+- Global Secondary Index (GSI) & Local Secondary Index (LSI) for flexible queries.
+
+---
+
+## Transactions
+- DynamoDB supports **ACID transactions**.
+- Transactional reads/writes **consume 2x capacity**.
+- Use for multi-item or multi-table updates requiring atomicity.
+
+---
+
+## Best Practices
+- Use **on-demand mode** if traffic is unpredictable.
+- Enable **point-in-time recovery (PITR)** for backup.
+- Monitor **ConsumedCapacity** in CloudWatch.
+- For **large scan operations**, use **pagination**.
+- Consider **S3 export for large datasets**.
+
+---
+
+## Common CLI Commands
+
+- List objects (if used with DynamoDB export or S3 integration):
+```bash
+aws dynamodb list-tables
+aws dynamodb describe-table --table-name MyTable
+aws dynamodb scan --table-name MyTable
+aws dynamodb query --table-name MyTable --key-condition-expression "PK = :pk" --expression-attribute-values '{":pk":{"S":"123"}}'
+
 
