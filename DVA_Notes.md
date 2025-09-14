@@ -265,4 +265,47 @@
  – You can decrease the stream’s capacity by merging shards
 
  – You can increase the stream’s capacity by splitting shards
+# API Gateway - AWS DVA Exam Notes
 
+## Request & Response Flow
+
+Client
+│
+▼
+Method Request
+│ (parameters, headers, body validation)
+▼
+API Gateway
+│
+Integration Request
+│ (maps method request → backend format)
+▼
+Backend (Lambda, HTTP, Mock, etc.)
+│
+Integration Response
+│ (maps backend response → method response)
+▼
+Method Response
+│ (HTTP status codes, headers, body to client)
+▼
+Client
+
+
+---
+
+## Key Concepts
+
+### Method Request / Method Response
+- **Client-facing layer**.
+- **Method Request:** expected parameters, headers, query strings, body.  
+- **Method Response:** HTTP status codes, headers, response models sent to client.
+
+### Integration Request / Integration Response
+- **Backend-facing layer**.
+- **Integration Request:** transforms client request into backend-friendly format.  
+- **Integration Response:** transforms backend output into client-facing response format.
+
+### Memory Tip
+- **Method = client-facing**  
+- **Integration = backend-facing**  
+- Think of it as **two translation layers** between client and backend.
