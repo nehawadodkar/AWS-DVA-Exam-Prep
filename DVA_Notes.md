@@ -153,12 +153,31 @@
 
 ---
 
+## Indexes
+
+### Local Secondary Index (LSI)
+- Can only be created **at table creation**.
+- Same **partition key** as the base table; can have a **different sort key**.
+- Reads **consume RCU** from the base table.
+- Max **5 LSIs per table**.
+- Useful for **querying by alternate sort key without duplicating data**.
+
+### Global Secondary Index (GSI)
+- Can be created **any time**.
+- Can have **different partition key and sort key** from base table.
+- Has **its own RCU/WCU**, independent of base table.
+- Max **20 GSIs per table**.
+- Useful for **flexible query patterns**.
+
+---
+
 ## Performance Tips
 - Use **Query** instead of Scan whenever possible.
 - **Partition key design** is critical for evenly distributed load.
 - Avoid hot partitions (high traffic to same partition key).
 - DynamoDB Accelerator (DAX) for caching.
-- Global Secondary Index (GSI) & Local Secondary Index (LSI) for flexible queries.
+- Use **LSI** when you need an alternate sort key.
+- Use **GSI** when you need alternate partition + sort key.
 
 ---
 
@@ -179,12 +198,8 @@
 ---
 
 ## Common CLI Commands
-
-- List objects (if used with DynamoDB export or S3 integration):
 ```bash
 aws dynamodb list-tables
 aws dynamodb describe-table --table-name MyTable
 aws dynamodb scan --table-name MyTable
 aws dynamodb query --table-name MyTable --key-condition-expression "PK = :pk" --expression-attribute-values '{":pk":{"S":"123"}}'
-
-
