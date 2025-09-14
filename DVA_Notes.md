@@ -193,3 +193,6 @@
 - **GSI → alternate partition + sort key, own capacity**.  
 - **DAX → in-memory cache, reduces read latency**.  
 - **Streams → change log, trigger Lambda, know concept only**.
+
+
+- **AWS SAM (Serverless Application Model)**: A framework to define, build, and deploy serverless applications using simplified templates for Lambda, API Gateway, DynamoDB, and other AWS resources.
