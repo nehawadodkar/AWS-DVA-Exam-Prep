@@ -261,3 +261,8 @@
 | Kinesis Firehose | Streaming → Storage | N/A | Automatic | ETL to S3/Redshift |
 | Kinesis Analytics | Analytics | N/A | N/A | SQL/Flink processing of streams |
 
+
+ – You can decrease the stream’s capacity by merging shards
+
+ – You can increase the stream’s capacity by splitting shards
+
