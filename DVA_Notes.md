@@ -122,84 +122,74 @@
 # DynamoDB - AWS DVA Exam Notes
 
 ## Basics
-- Fully managed NoSQL database.
-- Key-value and document data model.
-- Supports **Provisioned** and **On-Demand** capacity modes.
-- Global tables for multi-region replication.
-- Transactions supported (ACID).
+- Fully managed NoSQL database (key-value & document).  
+- Supports **Provisioned** and **On-Demand** capacity modes.  
+- Global tables for multi-region replication.  
+- Supports **ACID transactions**.  
 
 ---
 
 ## Capacity Units
 
 ### 1. Read Capacity Unit (RCU)
-- 1 RCU = 1 strongly consistent read per second for **1 item ≤ 4 KB**.
-- Eventually consistent read = **0.5 RCU per read**.
+- 1 RCU = 1 strongly consistent read/sec for **1 item ≤ 4 KB**.  
+- Eventually consistent read = **0.5 RCU**.  
 - **Formula:**
   - Strongly consistent: `RCU = ceil(ItemSizeKB / 4) * ReadPerSecond`
   - Eventually consistent: `RCU = ceil(ItemSizeKB / 4) * ReadPerSecond * 0.5`
 
 **Example:**  
-- Item = 6 KB, 10 strongly consistent reads/sec  
-`RCU = ceil(6/4) * 10 = 2 * 10 = 20`
+- Item = 6 KB, 10 strongly consistent reads/sec → `RCU = 20`
 
 ### 2. Write Capacity Unit (WCU)
-- 1 WCU = 1 write per second for **1 item ≤ 1 KB**.
+- 1 WCU = 1 write/sec for **1 item ≤ 1 KB**.  
 - **Formula:** `WCU = ceil(ItemSizeKB / 1) * WritesPerSecond`
 
 **Example:**  
-- Item = 3 KB, 5 writes/sec  
-`WCU = ceil(3/1) * 5 = 3 * 5 = 15`
+- Item = 3 KB, 5 writes/sec → `WCU = 15`
 
 ---
 
 ## Indexes
 
 ### Local Secondary Index (LSI)
-- Can only be created **at table creation**.
-- Same **partition key** as the base table; can have a **different sort key**.
-- Reads **consume RCU** from the base table.
-- Max **5 LSIs per table**.
-- Useful for **querying by alternate sort key without duplicating data**.
+- Created **at table creation**.  
+- Same **partition key**, alternate **sort key**.  
+- Reads consume RCU from base table.  
 
 ### Global Secondary Index (GSI)
-- Can be created **any time**.
-- Can have **different partition key and sort key** from base table.
-- Has **its own RCU/WCU**, independent of base table.
-- Max **20 GSIs per table**.
-- Useful for **flexible query patterns**.
+- Can be created **any time**.  
+- Can have **different partition & sort key**.  
+- Has **its own RCU/WCU**, independent of base table.  
 
 ---
 
-## Performance Tips
-- Use **Query** instead of Scan whenever possible.
-- **Partition key design** is critical for evenly distributed load.
-- Avoid hot partitions (high traffic to same partition key).
-- DynamoDB Accelerator (DAX) for caching.
-- Use **LSI** when you need an alternate sort key.
-- Use **GSI** when you need alternate partition + sort key.
+## DynamoDB Streams
+- Captures **item-level changes** (insert, modify, remove).  
+- Can trigger **Lambda** for real-time processing.  
+- Stream options: `KEYS_ONLY`, `NEW_IMAGE`, `OLD_IMAGE`, `NEW_AND_OLD_IMAGES`.  
+- **DVA focus:** know concept & use case only.  
+
+---
+
+## DynamoDB Accelerator (DAX)
+- **In-memory cache** for DynamoDB.  
+- Reduces read latency from **ms → μs**.  
+- Helps offload RCU consumption for **read-heavy workloads**.  
 
 ---
 
 ## Transactions
-- DynamoDB supports **ACID transactions**.
-- Transactional reads/writes **consume 2x capacity**.
-- Use for multi-item or multi-table updates requiring atomicity.
+- Supports **ACID transactions**.  
+- Transactional read/write consumes **2x capacity**.  
 
 ---
 
-## Best Practices
-- Use **on-demand mode** if traffic is unpredictable.
-- Enable **point-in-time recovery (PITR)** for backup.
-- Monitor **ConsumedCapacity** in CloudWatch.
-- For **large scan operations**, use **pagination**.
-- Consider **S3 export for large datasets**.
-
----
-
-## Common CLI Commands
-```bash
-aws dynamodb list-tables
-aws dynamodb describe-table --table-name MyTable
-aws dynamodb scan --table-name MyTable
-aws dynamodb query --table-name MyTable --key-condition-expression "PK = :pk" --expression-attribute-values '{":pk":{"S":"123"}}'
+## Exam Memory Tips
+- **RCU → 4 KB per read**, **WCU → 1 KB per write**.  
+- **Eventually consistent read → half RCU**.  
+- **Transactional read/write → 2x capacity**.  
+- **LSI → same partition, alternate sort key**.  
+- **GSI → alternate partition + sort key, own capacity**.  
+- **DAX → in-memory cache, reduces read latency**.  
+- **Streams → change log, trigger Lambda, know concept only**.
