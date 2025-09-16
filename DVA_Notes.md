@@ -346,7 +346,7 @@ Provides a dedicated, private network connection from your on-premises data cent
 Speeds up long-distance uploads/downloads to S3 using CloudFront edge locations + AWS backbone network. Useful for large files and global users.
 
 
-🔹 Stage Variables (API Gateway)
+**🔹 Stage Variables (API Gateway)**
 
 Live in API Gateway, per stage (dev, test, prod).
 
@@ -358,7 +358,7 @@ Example: tableName = DevTable in dev stage, ProdTable in prod.
 
 👉 Think: per-stage config at API Gateway level.
 
-🔹 Lambda Environment Variables
+**🔹 Lambda Environment Variables**
 
 Live in Lambda, per function.
 
@@ -368,9 +368,9 @@ Same across all API Gateway stages (unless you deploy separate Lambdas).
 
 Good for secrets, DB names, ARNs.
 
-👉 Think: per-function config inside Lambda.
+**👉 Think: per-function config inside Lambda.**
 
-⚡ Memory hook:
+**⚡ Memory hook:**
 
 Stage variables = API Gateway’s way to change behavior per stage.
 Env variables = Lambda’s way to configure itself.
