@@ -337,11 +337,40 @@ Client
 💡 Easy Tip: Streams = **“What changed and when”**, pick the view type based on **what you want to see**.
 
 
-AWS Direct Connect
-
+**AWS Direct Connect
+**
 Provides a dedicated, private network connection from your on-premises data center to AWS. More reliable and lower latency than the public internet.
 
-S3 Transfer Acceleration
+**S3 Transfer Acceleration**
 
 Speeds up long-distance uploads/downloads to S3 using CloudFront edge locations + AWS backbone network. Useful for large files and global users.
 
+
+🔹 Stage Variables (API Gateway)
+
+Live in API Gateway, per stage (dev, test, prod).
+
+Used to customize backend integrations without changing code.
+
+Passed to Lambda via mapping templates.
+
+Example: tableName = DevTable in dev stage, ProdTable in prod.
+
+👉 Think: per-stage config at API Gateway level.
+
+🔹 Lambda Environment Variables
+
+Live in Lambda, per function.
+
+Key-value pairs accessible inside Lambda code.
+
+Same across all API Gateway stages (unless you deploy separate Lambdas).
+
+Good for secrets, DB names, ARNs.
+
+👉 Think: per-function config inside Lambda.
+
+⚡ Memory hook:
+
+Stage variables = API Gateway’s way to change behavior per stage.
+Env variables = Lambda’s way to configure itself.
