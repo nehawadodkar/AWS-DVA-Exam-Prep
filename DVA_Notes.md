@@ -374,3 +374,19 @@ Good for secrets, DB names, ARNs.
 
 Stage variables = API Gateway’s way to change behavior per stage.
 Env variables = Lambda’s way to configure itself.
+
+
+
+| Feature | LSI (Local Secondary Index) | GSI (Global Secondary Index) |
+|---------|----------------------------|-----------------------------|
+| **Partition Key** | Same as base table | Can be different |
+| **Sort Key** | Can be different | Can be different |
+| **Creation** | Only at table creation | Can add anytime |
+| **RCU/WCU** | Shares base table | Own separate provisioned capacity |
+| **Write Cost** | Included in base table writes | Extra cost for writes to index |
+| **Limit** | 5 per table | 20 per table (soft limit) |
+| **Use Case** | Alternate sorting/filtering within same partition | Query using different access patterns |
+
+**Memory Hook:**  
+- **LSI = Local → Same PK, shares capacity**  
+- **GSI = Global → New PK allowed, separate capacity**  
