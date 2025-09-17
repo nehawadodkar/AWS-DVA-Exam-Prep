@@ -706,6 +706,24 @@ Client Request
 - **Service Map** = visualize **latency between services**  
 - **Annotations** = filter & search traces  
 - Works especially well with **Lambda + API Gateway + DynamoDB**
+- 
+
+# API Gateway - HTTP Integration Types
+
+You can integrate an API Gateway method with a custom HTTP endpoint in **two main ways**:
+
+| Integration Type        | Description / Notes |
+|-------------------------|-------------------|
+| **HTTP Proxy (HTTP_PROXY)** | Simple setup: just set HTTP method & endpoint URI. API Gateway forwards requests/responses directly. Use `Configure as proxy resource` checkbox in console. Best for EC2/back-end apps. |
+| **HTTP Custom (HTTP)** | More involved: map incoming request data to integration request, and integration response to method response. Supports ports 80, 443, 1024-65535. |
+| **Lambda Proxy (AWS_PROXY)** | For Lambda functions. API Gateway handles request/response mapping automatically. |
+| **Lambda Custom (AWS)** | For Lambda functions with manual request/response mapping. |
+| **Mock (MOCK)** | Used for testing. Returns a response without backend integration. |
+
+**💡 Key Gotchas:**  
+- Use **HTTP_PROXY** when integrating with a non-Lambda application (like EC2).  
+- **AWS / AWS_PROXY** are **Lambda only**.  
+- **HTTP (custom)** requires explicit mapping of request/response.  
 
 
 
