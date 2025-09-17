@@ -464,6 +464,52 @@ Env variables = Lambda’s way to configure itself.
 
 ---
 
+# 📝 AWS CI/CD Visual Cheat Sheet – DVA Exam
+
+Developer
+|
+v
++----------------+
+| CodeCommit | (Source Control / Git repo)
++----------------+
+|
+v
++----------------+
+| CodePipeline | (Orchestrates CI/CD)
+| - Monitors each stage
+| - Automates workflow
+| - Manual approvals optional
++----------------+
+|
+v
++----------------+ +----------------+
+| CodeBuild | --> | CodeDeploy |
+| - Build/Test | | - Deploy apps |
+| - Produces artifacts | - EC2 / Lambda / ECS / On-prem
++----------------+ +----------------+
+|
+v
+Application Live
+
+
+## Roles Summary
+
+| Service        | Role in CI/CD                       | Key Notes                         |
+|----------------|-----------------------------------|----------------------------------|
+| CodeCommit     | Stores code                        | Git-based, secure                |
+| CodeBuild      | Build & test code                  | Produces artifacts               |
+| CodePipeline   | Orchestrates workflow              | Passes artifacts, monitors stages|
+| CodeDeploy     | Deploys apps                       | Blue/Green or in-place           |
+| CodeStar       | Project management + CI/CD setup   | Optional, unified dashboard      |
+
+## Exam Tips
+
+- Pipeline = central hub integrating **source → build → deploy**.  
+- **Artifacts** move automatically between stages.  
+- Manual approvals can pause pipeline at any stage.  
+- **Monitoring**: CodePipeline shows stage status; CodeDeploy shows deployment success/failure.  
+- CodeStar simplifies project setup but is optional for exam.  
+
 
 
 
