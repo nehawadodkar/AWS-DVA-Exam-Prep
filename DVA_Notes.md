@@ -616,7 +616,16 @@ Cluster
 
 **Decrease shards when:**  
 - Data rate is **lower than total shard capacity**, to reduce cost  
-- You want to **merge shards** to simplify stream management  
+- You want to **merge shards** to simplify stream management
+
+- **⚠️ Gotcha – Lambda Concurrency with Kinesis Shards**
+
+- **Max Lambda concurrency = number of active Kinesis shards**  
+  - Each shard triggers **one Lambda invocation at a time**.  
+- **Merging shards** reduces parallelism; splitting shards increases it.  
+- **Lambda does not automatically throttle** due to too many shards, but **account concurrency limits** still apply.  
+- Example: 100 shards → at most 100 concurrent Lambda executions, regardless of record volume.
+
 
 
 
