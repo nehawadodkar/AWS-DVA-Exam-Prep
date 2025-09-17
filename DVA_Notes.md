@@ -389,4 +389,36 @@ Env variables = Lambda’s way to configure itself.
 
 **Memory Hook:**  
 - **LSI = Local → Same PK, shares capacity**  
-- **GSI = Global → New PK allowed, separate capacity**  
+- **GSI = Global → New PK allowed, separate capacity**
+
+- # AWS Lambda Concurrency (Quick Notes)
+
+| Concept                 | What it means                               | Restaurant Analogy 🍽️                  |
+|--------------------------|----------------------------------------------|-----------------------------------------|
+| **Account Concurrency** | Total concurrent executions allowed (default 1,000 per region) | Total tables in the restaurant |
+| **Reserved Concurrency**| Guaranteed executions for one function       | VIP tables reserved for a guest |
+| **Unreserved Concurrency** | Shared leftover capacity for other functions | Remaining tables open to all guests |
+| **Burst Concurrency**   | Short-term spike capacity                   | Extra chairs quickly added for a sudden rush |
+| **Concurrency 0**       | Function disabled, cannot run               | Tables blocked off — no one can sit there |
+| **Throttled Requests**  | Invocations blocked when no concurrency left | Guests turned away at the door |
+
+**Memory Hook:**  
+Reserved = VIP tables → guaranteed  
+Unreserved = shared tables → not guaranteed  
+0 = blocked tables → no service  
+Throttled = too many guests → wait or fail
+
+
+```mermaid
+flowchart LR
+    A[Account Limit: 1000 Tables] --> B[Reserved Concurrency: VIP Tables]
+    A --> C[Unreserved Concurrency: Shared Tables]
+    C -->|If full| D[Throttled: Guests turned away]
+    B -->|If set to 0| E[Concurrency 0: Tables blocked]
+
+    style A fill:#f2f2f2,stroke:#333,stroke-width:1px
+    style B fill:#87ceeb,stroke:#333,stroke-width:1px
+    style C fill:#90ee90,stroke:#333,stroke-width:1px
+    style D fill:#ff9999,stroke:#333,stroke-width:1px
+    style E fill:#ffd580,stroke:#333,stroke-width:1px
+
