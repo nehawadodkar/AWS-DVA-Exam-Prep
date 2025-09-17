@@ -757,4 +757,21 @@ You can integrate an API Gateway method with a custom HTTP endpoint in **two mai
 - Cognito Sync = simple, old, only small key-value data  
 - AppSync = modern, scalable, real-time, handles rich data queries & mutations
 
+# Amazon Cognito - User Pools vs Identity Pools
+
+| Feature                   | User Pools                               | Identity Pools (Federated Identities)       |
+|----------------------------|-----------------------------------------|--------------------------------------------|
+| Purpose                    | User **authentication & sign-up/sign-in** | User **authorization** to access AWS resources |
+| Auth Flow                  | Username/password, social logins (SAML, OIDC) | Works with User Pools, social logins, or unauthenticated guests |
+| AWS Credentials            | ❌ Does NOT provide AWS creds directly   | ✅ Provides temporary AWS credentials (IAM roles) |
+| Tokens                     | ID token, access token, refresh token   | Uses IAM roles, no tokens directly         |
+| Use Case                   | App login, authentication, MFA, password policies | Access S3, DynamoDB, Lambda securely after login |
+| Status                     | Current, recommended                     | Current, recommended                       |
+
+**💡 Gotcha:**  
+- **User Pools = Who you are** (authenticate users)  
+- **Identity Pools = What you can access** (authorize AWS resources)
+
+**⚠️ Gotcha:** Cognito User Pools = just a **user directory** for authentication; it **does NOT sync user data** across devices.
+
 
