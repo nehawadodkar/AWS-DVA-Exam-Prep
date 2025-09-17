@@ -643,6 +643,9 @@ Cluster
 - **All-at-Once / Rolling** → fast, but riskier  
 
 
+**Key Exam Tip:**
 
+- Linear = traffic gradually shifted in steps (good for monitoring metrics).
+- Rolling = instances updated in batches, may cause brief downtime.
 
 
