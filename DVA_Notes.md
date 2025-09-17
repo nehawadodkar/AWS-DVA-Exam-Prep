@@ -587,4 +587,36 @@ Cluster
 - **Fargate** = easier for serverless deployments, no EC2 management  
 - **ECS integrates** with ALB, CloudWatch, IAM, and Secrets Manager
 
+- # 📝 Amazon Kinesis Data Streams – Shards
+
+**Shard:**  
+- A **shard** is the **base throughput unit** of a Kinesis data stream.  
+- Each shard can ingest and output a **fixed amount of data**:  
+  - **Write capacity:** 1 MB/sec or 1,000 records/sec  
+  - **Read capacity:** 2 MB/sec  
+
+**Key Points:**  
+- Streams are composed of **one or more shards**.  
+- **Scaling:** Add/remove shards to increase/decrease stream throughput.  
+- **Partition key** determines which shard a record goes to → uneven keys can cause a **hot shard**.  
+- Use **resharding** to split or merge shards when throughput needs change.  
+
+**Summary:**  
+- **Shard = throughput unit**  
+- **Multiple shards = higher capacity**  
+- **Partition key distribution matters** to avoid hot shards.
+
+
+# 📝 Kinesis Data Streams – Scaling Shards
+
+**Increase shards when:**  
+- Incoming data rate **exceeds shard write limits** (1 MB/sec or 1,000 records/sec per shard)  
+- Consumers **cannot keep up** with the read throughput (2 MB/sec per shard)  
+- You need **higher parallelism** for processing data  
+
+**Decrease shards when:**  
+- Data rate is **lower than total shard capacity**, to reduce cost  
+- You want to **merge shards** to simplify stream management  
+
+
 
