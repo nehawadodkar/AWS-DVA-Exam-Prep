@@ -648,4 +648,50 @@ Cluster
 - Linear = traffic gradually shifted in steps (good for monitoring metrics).
 - Rolling = instances updated in batches, may cause brief downtime.
 
+# 📝 AWS X-Ray – Quick Revision Notes
+
+## 1️⃣ What is X-Ray?
+- **AWS X-Ray** is a **distributed tracing service** to analyze and debug applications.  
+- Tracks requests across **microservices or serverless apps**, identifying **latency, errors, and bottlenecks**.
+
+---
+
+## 2️⃣ Key Concepts
+
+| Concept         | Purpose / Memory Tip                                 |
+|-----------------|------------------------------------------------------|
+| **Trace**       | Represents a **request** flowing through the app    |
+| **Segment**     | Work done by **one service/component**              |
+| **Subsegment**  | Finer details in a segment (DB query, API call)     |
+| **Annotation**  | Key-value for **filtering/searching traces**        |
+| **Service Map** | Visual map of **services & their interactions**     |
+| **Sampling**    | Records a **subset of requests** to save cost       |
+
+---
+
+## 3️⃣ Flow Overview
+
+Client Request  
+↓  
+**X-Ray Agent** → collects telemetry from app  
+↓  
+**X-Ray Service** → stores traces, builds service map  
+↓  
+**Insights** → latency, errors, throttling, bottlenecks  
+
+---
+
+## 4️⃣ Integrations
+- AWS Services: Lambda, API Gateway, ECS, EC2, Elastic Beanstalk, S3, DynamoDB  
+- SDKs: Java, Node.js, Python, Go, .NET  
+
+---
+
+## 5️⃣ Quick Memory Tips
+- **Trace = request**, **Segment = service**, **Subsegment = detailed step**  
+- **Service Map** = visualize **latency between services**  
+- **Annotations** = filter & search traces  
+- Works especially well with **Lambda + API Gateway + DynamoDB**
+
+
 
