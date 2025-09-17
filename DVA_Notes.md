@@ -414,13 +414,20 @@ Env variables = Lambda’s way to configure itself.
 
 ---
 
-## **Visual Analogy (Restaurant)**
+## Visual Analogy (Restaurant)
 
 ```mermaid
 flowchart TD
-    A[Account Concurrency Limit: 1000 tables] --> B[Reserved Concurrency: VIP tables (up to 900)]
-    A --> C[Unreserved Concurrency: Shared tables (at least 100 kept aside)]
-    B -->|Example: FuncA = 450, FuncB = 450| D[Functions with guarantees]
-    C -->|Shared 100+| E[Other functions without reserved concurrency]
-    F[Concurrency = 0] -->|All tables blocked| G[Function disabled]
-    H[Throttled Requests] -->|Too many guests, no tables left| I[Requests dropped]
+    A[Account Limit = 1000 tables]
+    B[Reserved Concurrency (VIP tables, up to 900)]
+    C[Unreserved Concurrency (Shared tables, at least 100)]
+    D[Functions with guarantees]
+    E[Other functions without reserved concurrency]
+    F[Concurrency = 0 → Function disabled]
+    G[Throttled Requests → Guests turned away]
+
+    A --> B
+    A --> C
+    B --> D
+    C --> E
+    F -.-> G
