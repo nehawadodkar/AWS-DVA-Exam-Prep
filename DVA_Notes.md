@@ -532,3 +532,59 @@ Even if your **CloudWatch metrics show consumed capacity below provisioned limit
 - DAX **caches queries in memory**, giving **microsecond latency**  
 ❌ Note: DAX **does not fix hot partitions for writes** and adds cost.
 
+
+# 📝 Amazon ECS (Elastic Container Service) – Quick Notes
+
+## 1️⃣ What is ECS?
+- **ECS (Elastic Container Service)** is a fully managed **container orchestration service** on AWS.  
+- Allows you to **run, scale, and manage Docker containers** on:
+  - **AWS Fargate** (serverless)
+  - **EC2** (self-managed)  
+- Handles **scheduling, scaling, and health monitoring** of containers.
+
+---
+
+## 2️⃣ ECS Components
+
+| Component             | Description                                                                 |
+|----------------------|-----------------------------------------------------------------------------|
+| **Cluster**           | Logical grouping of container instances (EC2 or Fargate)                    |
+| **Task Definition**   | Blueprint for your application; specifies containers, CPU, memory, networking |
+| **Task**              | An instance of a task definition running in the cluster                     |
+| **Service**           | Ensures desired number of tasks are running; handles scaling & load balancing |
+| **Container**         | Docker container running inside a task                                        |
+| **Container Instance**| EC2 instance registered to a cluster (EC2 launch type only)                 |
+| **Fargate**           | Serverless compute for ECS; no EC2 instances needed                          |
+
+---
+
+## 3️⃣ ECS Flow (High-Level)
+
+Cluster  
+├─ Service (manages tasks)  
+│    ├─ Task (1 or more containers)  
+│    │     ├─ Container 1  
+│    │     └─ Container 2  
+│    └─ Task (another instance)  
+└─ Container Instances (for EC2 launch type) / Fargate (serverless)  
+
+---
+
+## 4️⃣ Launch Types
+
+| Launch Type | Description |
+|------------|-------------|
+| **EC2**    | You manage EC2 instances; ECS schedules containers on them |
+| **Fargate**| Serverless; AWS manages compute; pay per container vCPU & memory |
+
+---
+
+## 5️⃣ Quick Exam Tips
+
+- **Task Definition** = “recipe” for running containers  
+- **Service** = ensures tasks are running & handles scaling  
+- **Cluster** = logical grouping of resources  
+- **Fargate** = easier for serverless deployments, no EC2 management  
+- **ECS integrates** with ALB, CloudWatch, IAM, and Secrets Manager
+
+
