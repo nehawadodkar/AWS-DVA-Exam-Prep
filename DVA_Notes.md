@@ -742,3 +742,19 @@ You can integrate an API Gateway method with a custom HTTP endpoint in **two mai
 
 ⚠️ Common exam trap: If the scenario is about **redirects or personalized content** → CloudFront Functions, **NOT Route 53**.
 
+
+# AppSync vs Cognito Sync - Quick Revision
+
+| Feature         | AppSync                                | Cognito Sync (Legacy)                 |
+|-----------------|---------------------------------------|--------------------------------------|
+| Purpose         | GraphQL API w/ real-time subscriptions | Sync user data (key-value) across devices |
+| Offline Support | ✅ Yes                                  | Limited                              |
+| Real-time       | ✅ Yes                                  | ⚠️ Only SNS push                      |
+| Use Cases       | Chat apps, live dashboards, collaborative apps | User preferences, settings, game scores |
+| Status          | Current, recommended                   | Legacy                               |
+
+**💡 Gotchas:**  
+- Cognito Sync = simple, old, only small key-value data  
+- AppSync = modern, scalable, real-time, handles rich data queries & mutations
+
+
