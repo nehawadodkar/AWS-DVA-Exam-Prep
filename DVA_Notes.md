@@ -391,34 +391,36 @@ Env variables = Lambda’s way to configure itself.
 - **LSI = Local → Same PK, shares capacity**  
 - **GSI = Global → New PK allowed, separate capacity**
 
-- # AWS Lambda Concurrency (Quick Notes)
+- # 🔹 AWS Lambda Concurrency Notes
 
-| Concept                 | What it means                               | Restaurant Analogy 🍽️                  |
-|--------------------------|----------------------------------------------|-----------------------------------------|
-| **Account Concurrency** | Total concurrent executions allowed (default 1,000 per region) | Total tables in the restaurant |
-| **Reserved Concurrency**| Guaranteed executions for one function       | VIP tables reserved for a guest |
-| **Unreserved Concurrency** | Shared leftover capacity for other functions | Remaining tables open to all guests |
-| **Burst Concurrency**   | Short-term spike capacity                   | Extra chairs quickly added for a sudden rush |
-| **Concurrency 0**       | Function disabled, cannot run               | Tables blocked off — no one can sit there |
-| **Throttled Requests**  | Invocations blocked when no concurrency left | Guests turned away at the door |
+| Concept | What it means | Numbers & Limits (DVA Exam) |
+|---------|---------------|-----------------------------|
+| **Account Concurrency Limit** | Total concurrent executions allowed per AWS account per region | Default = **1,000** (can be increased). Max capacity across all functions |
+| **Reserved Concurrency** | Guaranteed concurrency for a specific function | Deducted from account limit. **Cannot exceed account limit − 100** (so max = 900 if limit = 1000) |
+| **Unreserved Concurrency** | Shared pool for all functions without reserved concurrency | Always at least **100** kept aside (for flexibility). Shrinks as you assign reserved concurrency |
+| **Burst Concurrency** | Short-term spike handling before steady scaling | Supports bursts (e.g., 500–3000 depending on region) before scaling gradually up to account limit |
+| **Concurrency 0** | Reserved concurrency explicitly set to 0 | Function is **disabled**; all requests throttled immediately |
+| **Throttled Invocations** | Lambda can’t execute because concurrency limit reached | Reported in CloudWatch `Throttles` metric |
+| **Push vs Pull Event Sources** | Push = one event = one invocation; Pull = polled & batched | Push: S3, API GW, SNS, EventBridge. Pull: SQS, Kinesis, DynamoDB Streams |
 
-**Memory Hook:**  
-Reserved = VIP tables → guaranteed  
-Unreserved = shared tables → not guaranteed  
-0 = blocked tables → no service  
-Throttled = too many guests → wait or fail
+---
 
+## **Memory Hooks**
+- *Reserved = VIP tables (guaranteed)*  
+- *Unreserved = leftover tables (shared)*  
+- *100 tables always kept unreserved by AWS*  
+- *Concurrency 0 = function disabled*  
+- *Throttled = too many guests → some turned away*  
+
+---
+
+## **Visual Analogy (Restaurant)**
 
 ```mermaid
-flowchart LR
-    A[Account Limit: 1000 Tables] --> B[Reserved Concurrency: VIP Tables]
-    A --> C[Unreserved Concurrency: Shared Tables]
-    C -->|If full| D[Throttled: Guests turned away]
-    B -->|If set to 0| E[Concurrency 0: Tables blocked]
-
-    style A fill:#f2f2f2,stroke:#333,stroke-width:1px
-    style B fill:#87ceeb,stroke:#333,stroke-width:1px
-    style C fill:#90ee90,stroke:#333,stroke-width:1px
-    style D fill:#ff9999,stroke:#333,stroke-width:1px
-    style E fill:#ffd580,stroke:#333,stroke-width:1px
-
+flowchart TD
+    A[Account Concurrency Limit: 1000 tables] --> B[Reserved Concurrency: VIP tables (up to 900)]
+    A --> C[Unreserved Concurrency: Shared tables (at least 100 kept aside)]
+    B -->|Example: FuncA = 450, FuncB = 450| D[Functions with guarantees]
+    C -->|Shared 100+| E[Other functions without reserved concurrency]
+    F[Concurrency = 0] -->|All tables blocked| G[Function disabled]
+    H[Throttled Requests] -->|Too many guests, no tables left| I[Requests dropped]
