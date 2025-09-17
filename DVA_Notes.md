@@ -508,7 +508,13 @@ Application Live
 - **Artifacts** move automatically between stages.  
 - Manual approvals can pause pipeline at any stage.  
 - **Monitoring**: CodePipeline shows stage status; CodeDeploy shows deployment success/failure.  
-- CodeStar simplifies project setup but is optional for exam.  
+- CodeStar simplifies project setup but is optional for exam.
+
+**Amazon CodeGuru** (maybe like copilot) is a machine learning-powered developer tool that provides intelligent recommendations to improve code quality and application performance.  
+It has two main components:  
+- **CodeGuru Reviewer** – automated code reviews for Java and Python.  
+- **CodeGuru Profiler** – analyzes runtime performance and identifies expensive code paths.
+
 
 
 
