@@ -520,4 +520,15 @@ It has two main components:
 **Exponential Backoff**: Retry strategy for throttled or failed requests, increasing wait intervals exponentially to improve reliability.
 
 
+**⚠️ Gotcha – Hot Partitions in DynamoDB:**  
+Even if your **CloudWatch metrics show consumed capacity below provisioned limits**, you can still get throttling errors due to a **hot partition**.  
+
+✅ Fix it by:  
+- Distributing reads/writes evenly across partition keys  
+- Using **exponential backoff** on retries  
+
+💡 **When to use DAX:**  
+- For **read-heavy workloads** where repeated reads on the same data cause latency issues  
+- DAX **caches queries in memory**, giving **microsecond latency**  
+❌ Note: DAX **does not fix hot partitions for writes** and adds cost.
 
