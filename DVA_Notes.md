@@ -403,64 +403,67 @@ Env variables = Lambda’s way to configure itself.
 | **Throttled Invocations** | Requests denied because no concurrency is available | Reported in CloudWatch `Throttles` metric | Guests turned away at the door |
 | **Push vs Pull Event Sources** | Push = one event = one invocation; Pull = batched events | Push: S3, API GW, SNS. Pull: SQS, Kinesis, DynamoDB Streams | Push = one guest per seat; Pull = several guests seated together |
 
+# 📝 AWS API Gateway Cheat Sheet – DVA Exam
+
+## 1️⃣ What is API Gateway?
+- Fully managed service to create, deploy, and manage **APIs** (REST, HTTP, WebSocket).
+- Acts as a **front door** for applications to access backend services like Lambda, EC2, or HTTP endpoints.
+- Handles:
+  - **Traffic management**
+  - **Authorization & authentication**
+  - **Monitoring & logging**
+  - **Throttling & caching**
+
+---
+
+## 2️⃣ Core Components
+
+| Component      | Quick Notes                                     |
+|----------------|------------------------------------------------|
+| **API**        | Collection of resources & methods             |
+| **Resource**   | URL path segment (`/users`, `/orders`)        |
+| **Method**     | HTTP verb: GET, POST, PUT, DELETE, PATCH      |
+| **Integration**| Backend connection (Lambda, HTTP, Mock, AWS) |
+| **Stage**      | Deployment env: dev / test / prod             |
+| **Deployment** | Snapshot of API config for a stage            |
+
+---
+
+## 3️⃣ Integration Types
+
+| Type             | Notes / Use Case                                   |
+|-----------------|--------------------------------------------------|
+| **Lambda**       | Serverless, Proxy / Non-Proxy                     |
+| **HTTP/HTTPS**   | Any HTTP endpoint                                 |
+| **Mock**         | Returns static response for testing              |
+| **AWS Service**  | Call S3, SNS, DynamoDB                            |
+| **VPC Link**     | Private resources inside VPC                      |
+
+---
+
+## 4️⃣ Lambda Integration: Proxy vs Non-Proxy
+
+| Feature            | Proxy Integration           | Non-Proxy Integration       |
+|-------------------|---------------------------|----------------------------|
+| Request Mapping    | Auto forwards all         | Must map manually          |
+| Response Mapping   | Lambda returns full HTTP  | API Gateway maps output    |
+| Flexibility        | Less flexible             | More flexible              |
+| Use Case           | Simple serverless API     | Complex transformations    |
+
+---
 
 
-📝 API Gateway – 1-Page Cheat Sheet (DVA)
-1️⃣ Core Concepts
-Component	Quick Notes
-API	Collection of resources & methods
-Resource	URL path segment (/users, /orders)
-Method	HTTP verb: GET, POST, PUT, DELETE, PATCH
-Integration	Backend connection (Lambda, HTTP, Mock, AWS)
-Stage	Deployment env: dev / test / prod
-Deployment	Snapshot of API config for a stage
-2️⃣ Integration Types
-Type	Notes / Use Case
-Lambda	Serverless, Proxy / Non-Proxy
-HTTP/HTTPS	Any HTTP endpoint
-Mock	Returns static response for testing
-AWS Service	Call S3, SNS, DynamoDB
-VPC Link	Private resources inside VPC
-3️⃣ Lambda Proxy vs Non-Proxy
-Feature	Proxy Integration	Non-Proxy Integration
-Request Mapping	Auto forwards all	Must map manually
-Response Mapping	Lambda returns full HTTP	API Gateway maps output
-Flexibility	Less flexible	More flexible
-Use Case	Simple serverless API	Complex transformations
-4️⃣ Quick Visual Flow
-Client (Browser/App)
-      |
-      v
-+-----------------------+
-|      API Gateway      |
-| Authorize / Throttle  |
-| Cache / Stage         |
-+-----------+-----------+
-            |
-            v
-         Resources
-       (/users, /orders)
-            |
-            v
-          Methods
-       GET / POST / PUT
-            |
-            v
-      Integration Type
-+-----------------------+
-| Lambda / HTTP / Mock  |
-| AWS Service / VPC Link|
-+-----------------------+
-            |
-            v
-          Backend
+---
 
-5️⃣ Exam Quick Tips
+## 6️⃣ Exam Quick Tips
 
-Authorization: IAM / Cognito / Lambda Authorizer
+- **Authorization**: IAM / Cognito / Lambda Authorizer  
+- **Stages & Deployment**: Required to make API callable  
+- **Throttling & Caching**: Protect backend from spikes  
+- **Custom Domain**: Map API stage to friendly URL  
 
-Stages & Deployment: Required to make API callable
+---
 
-Throttling & Caching: Protect backend from spikes
 
-Custom Domain: Map API stage to friendly URL
+
+
