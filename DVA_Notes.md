@@ -116,6 +116,17 @@
 - **When not to use:** Clients near bucket; extra cost.
 - **Memory tip:** 🌍 Global on-ramp → 🚀 Edge → 🛣 AWS highway → 🪣 S3 bucket  
 - **Exam angle:** Uses CloudFront edge locations, **not CloudFront caching**.
+- 
+
+# ECS Placement Strategies - Table
+
+| Strategy  | Goal                               | Use Case / Notes                  |
+|-----------|------------------------------------|----------------------------------|
+| Binpack   | Use fewest instances possible       | Optimize resource usage, save costs |
+| Random    | Place tasks randomly               | Simple distribution, no preference |
+| Spread    | Distribute evenly across instances or AZs | Improve availability & fault tolerance |
+| Custom    | Combine constraints & preferences | Use task placement constraints + strategies |
+
 
 ---
 
