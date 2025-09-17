@@ -168,7 +168,10 @@
 - Captures **item-level changes** (insert, modify, remove).  
 - Can trigger **Lambda** for real-time processing.  
 - Stream options: `KEYS_ONLY`, `NEW_IMAGE`, `OLD_IMAGE`, `NEW_AND_OLD_IMAGES`.  
-- **DVA focus:** know concept & use case only.  
+- **DVA focus:** know concept & use case only.
+
+**⚠️ Gotcha:** GSIs in DynamoDB **always use eventual consistency** — strongly consistent reads are not supported.
+
 
 ---
 
