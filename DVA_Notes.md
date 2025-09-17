@@ -466,30 +466,28 @@ Env variables = Lambda’s way to configure itself.
 
 # 📝 AWS CI/CD Visual Cheat Sheet – DVA Exam
 
-Developer
-|
-v
-+----------------+
-| CodeCommit | (Source Control / Git repo)
-+----------------+
-|
-v
-+----------------+
-| CodePipeline | (Orchestrates CI/CD)
-| - Monitors each stage
-| - Automates workflow
-| - Manual approvals optional
-+----------------+
-|
-v
-+----------------+ +----------------+
-| CodeBuild | --> | CodeDeploy |
-| - Build/Test | | - Deploy apps |
-| - Produces artifacts | - EC2 / Lambda / ECS / On-prem
-+----------------+ +----------------+
-|
-v
-Application Live
+# 📝 AWS CI/CD Flow – DVA Exam
+
+## CI/CD Flow
+
+- **Developer commits code**
+  ↓
+- **CodeCommit** (Source Control / Git repo)
+  ↓
+- **CodePipeline** (Orchestrates workflow)
+  - Monitors each stage
+  - Automates workflow
+  - Supports manual approvals
+  ↓
+- **CodeBuild** (Build & Test)
+  - Produces artifacts
+  ↓
+- **CodeDeploy** (Deploy apps)
+  - Targets: EC2 / Lambda / ECS / On-prem
+  ↓
+- **Application Live**
+
+
 
 
 ## Roles Summary
