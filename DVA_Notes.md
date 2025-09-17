@@ -626,6 +626,23 @@ Cluster
 - **Lambda does not automatically throttle** due to too many shards, but **account concurrency limits** still apply.  
 - Example: 100 shards → at most 100 concurrent Lambda executions, regardless of record volume.
 
+- # 📝 AWS Deployment Types – Quick Reference
+
+| Deployment Type      | Description / Use Case                                                                 | Key Points / Gotchas |
+|---------------------|----------------------------------------------------------------------------------------|--------------------|
+| **In-Place (Rolling)** | Updates existing instances with new version                                        | - Old version replaced gradually<br>- Short downtime possible<br>- No rollback by default |
+| **Blue/Green**       | Deploy new version alongside old, switch traffic when ready                            | - Minimal downtime<br>- Easy rollback by switching traffic back<br>- Used in ECS, Elastic Beanstalk, Lambda aliases |
+| **Canary**           | Gradually shifts a small portion of traffic to new version before full rollout        | - Monitor metrics before full rollout<br>- Reduces risk of bad deployment<br>- Often combined with ALB or Lambda weighted routing |
+| **Linear**           | Gradually shifts traffic in equal increments at regular intervals                     | - Predictable traffic shift<br>- Good for controlled rollout<br>- Slower than canary if large traffic |
+| **All-at-Once**      | Deploy new version to all targets simultaneously                                      | - Fastest deployment<br>- High risk<br>- Potential downtime |
+| **Rolling with Additional Batch** | Adds new batch alongside old, then replaces old batch                           | - Reduces downtime<br>- More capacity required temporarily |
+
+💡 **Exam Tip:**  
+- **Blue/Green** → safest, easy rollback  
+- **Canary/Linear** → gradual traffic shifting, monitor metrics  
+- **All-at-Once / Rolling** → fast, but riskier  
+
+
 
 
 
