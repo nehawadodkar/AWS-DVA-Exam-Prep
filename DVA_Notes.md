@@ -516,6 +516,8 @@ It has two main components:
 - **CodeGuru Profiler** – analyzes runtime performance and identifies expensive code paths.
 
 
+**DynamoDB Accelerator (DAX)**: In-memory cache for DynamoDB that speeds up read-heavy workloads to microsecond latency.  
+**Exponential Backoff**: Retry strategy for throttled or failed requests, increasing wait intervals exponentially to improve reliability.
 
 
 
