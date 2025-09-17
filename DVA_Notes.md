@@ -726,4 +726,19 @@ You can integrate an API Gateway method with a custom HTTP endpoint in **two mai
 - **HTTP (custom)** requires explicit mapping of request/response.  
 
 
+# ⚡ Gotcha: Route 53 vs CloudFront (Geo Confusion!)
+
+🌍 **Route 53 Geolocation = "Which door to enter?"**  
+- DNS level → decides *which endpoint/server* (e.g., US users → US ALB, EU users → EU ALB).  
+- Think: *traffic routing before entering the building*.  
+
+📦 **CloudFront + Viewer-Country = "What do you get inside?"**  
+- Edge function → inspects user’s country, does redirects (e.g., `/us/`, `/uk/`).  
+- Think: *same building, but different rooms inside*.  
+
+💡 **Memory Trick:**  
+👉 *Route 53 = Where to go*  
+👉 *CloudFront = What to show*  
+
+⚠️ Common exam trap: If the scenario is about **redirects or personalized content** → CloudFront Functions, **NOT Route 53**.
 
