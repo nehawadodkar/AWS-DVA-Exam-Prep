@@ -129,4 +129,54 @@ Mnemonic: **Data with DEK → DEK with KEK**.
 - For **performance** → always encrypt large data with **DEKs**, not directly with CMKs.  
 - If a question says “strict policy, manage your own keys” → Answer = Customer Managed CMK.  
 
+# 🔑 AWS STS (Security Token Service) – DVA Exam Notes
+
+---
+
+## 📌 What is STS?
+- **AWS STS = Security Token Service**
+- Issues **short-term, temporary security credentials**:
+  - **Access Key ID**
+  - **Secret Access Key**
+  - **Session Token**
+  - **Expiration** (15 min – 12 hrs depending on API)
+- Removes the need for **long-term IAM users/keys**.
+
+---
+
+## 📌 When is STS used?
+
+| Use Case | Example | API Call |
+|----------|---------|----------|
+| **Cross-Account Access** | Assume role in another AWS account | `AssumeRole` |
+| **Federated Access (SAML)** | Corporate directory via Active Directory, Okta | `AssumeRoleWithSAML` |
+| **Federated Access (OIDC)** | Login via Google, Facebook, Amazon Cognito | `AssumeRoleWithWebIdentity` |
+| **Temporary Elevated Access** | MFA-protected API calls | `GetSessionToken` |
+| **Custom Federation** | Temporary creds for non-IAM users | `GetFederationToken` |
+
+---
+
+## 📌 Key STS API Calls
+
+- `AssumeRole` → Assume IAM role (same or cross-account).  
+- `AssumeRoleWithSAML` → SAML-based federation.  
+- `AssumeRoleWithWebIdentity` → OIDC-based federation (Cognito, Google).  
+- `GetSessionToken` → Temporary creds, often with MFA.  
+- `GetFederationToken` → Temporary creds for federated users.  
+
+---
+
+## 📌 Exam Gotchas
+
+- **Always temporary**: STS credentials are short-lived.  
+- **Cognito Identity Pools** → Use STS to give AWS creds.  
+- **Cross-account access** → Usually involves STS + resource-based policy.  
+- **Best practice**: Prefer STS + IAM roles over long-term access keys.  
+
+---
+
+## 🧠 Memory Trick
+**STS = Short-Term Security** → “I give you temporary keys, not permanent ones.”
+
+---
 
