@@ -248,4 +248,20 @@ Mnemonic: **Data with DEK → DEK with KEK**.
 - Always check **IAM + CMK key policy** permissions for multipart uploads
 
 ---
+## 📌 S3 Server-Side Encryption Headers – Quick Reference
+
+| Header                                      | Value / Purpose                     | Used In Scenario                                       | Notes / Gotchas |
+|--------------------------------------------|------------------------------------|-------------------------------------------------------|----------------|
+| `x-amz-server-side-encryption`             | `AES256`                            | SSE-S3 (Amazon-managed keys)                          | Ensures encryption, but not KMS |
+| `x-amz-server-side-encryption`             | `aws:kms`                           | SSE-KMS (AWS KMS-managed keys)                        | Only specifies KMS, may use default CMK |
+| `x-amz-server-side-encryption-aws-kms-key-id` | KMS Key ID or ARN                  | SSE-KMS with a **specific KMS key**                  | Required if bucket policy enforces a specific key |
+| `x-amz-server-side-encryption-context`     | Custom key-value context           | Optional advanced SSE-KMS scenarios                  | Can enforce encryption context checks |
+| `Content-Length`                            | Object size in bytes                | Useful in PUT requests for S3                        | Not an SSE header, but sometimes referenced in policies |
+| `x-amz-meta-*`                              | User-defined metadata               | Optional metadata on objects                          | Can store info about encryption, owner, etc. |
+
+### ⚡ Exam Gotchas
+- **PUT** request → programmatic upload; **must match bucket policy headers**  
+- **POST** request → browser form upload; policy can include conditions on headers too  
+- **x-amz-server-side-encryption** alone → allows SSE-S3 or SSE-KMS (default CMK)  
+- **x-amz-server-side-encryption-aws-kms-key-id** → enforces use of a specific KMS key
 
