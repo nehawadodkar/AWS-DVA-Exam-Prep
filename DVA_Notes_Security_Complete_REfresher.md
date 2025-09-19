@@ -23,7 +23,7 @@ Use these notes for **revision + last-day exam prep**.
 ---
 
 ### 🛠️ Skills
-- Implement **federated login** with Cognito or IAM + IdP.  
+- Implement **federated login** with Cognito or IAM + IdP.  (IdP = Identity Provider = SAML IdP (corporate SSO, active directory), aAuth IdP (google, fb etc) )
 - Secure apps with **JWT** / bearer tokens.  
 - Configure **programmatic access** (IAM roles > access keys).  
 - Use **AssumeRole** for temporary access.  
