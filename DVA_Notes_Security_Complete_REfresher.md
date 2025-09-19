@@ -128,6 +128,20 @@ Use these notes for **revision + last-day exam prep**.
 - **AppSync → “app sync” (whole app’s data via GraphQL).**
 
 
+# 🛑 IAM Roles vs IAM Users – Quick Exam Gotcha
+
+**Scenario:** App runs **on-premises** and uses AWS SDK.
+
+- **IAM Role:** Works **only inside AWS** (EC2, Lambda, ECS). ❌ Not for on-prem servers.  
+- **IAM User with Programmatic Access:** Provides **Access Key + Secret Key** stored in `~/.aws/credentials`. ✅ Correct for on-prem apps.  
+
+
+**Memory Hack:**  
+- **Roles = in-AWS only**  
+- **Access Keys = out-of-AWS apps**  
+
+
+
 
 ---
 
