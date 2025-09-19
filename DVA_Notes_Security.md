@@ -265,3 +265,18 @@ Mnemonic: **Data with DEK → DEK with KEK**.
 - **x-amz-server-side-encryption** alone → allows SSE-S3 or SSE-KMS (default CMK)  
 - **x-amz-server-side-encryption-aws-kms-key-id** → enforces use of a specific KMS key
 
+
+## 🔹 Lambda Authorizer (API Gateway)
+- Custom auth for API Gateway requests.
+- Types: **Token** (header/query) & **Request** (any request data).
+- Returns **IAM policy (Allow/Deny)**.
+- Can **cache results** to reduce Lambda calls.
+
+---
+
+## 🔹 CORS
+- Lets **browser apps from other domains** access your API/S3.
+- Browser sends **OPTIONS preflight**; server must return **CORS headers**.
+- Missing headers → browser blocks request (client-side).
+- Must configure in **API Gateway or S3**.
+
