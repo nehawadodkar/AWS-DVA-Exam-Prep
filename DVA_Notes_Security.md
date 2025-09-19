@@ -241,5 +241,11 @@ Mnemonic: **Data with DEK → DEK with KEK**.
 - IAM = Fallback / Manual
 
 
+
+### ⚡ Exam Gotcha
+- **AccessDenied on large uploads** → usually missing `kms:Decrypt` or `kms:GenerateDataKey*`   ⚡ ⚡ ⚡ **(Its decrypt and not encrypt !!! )**  ⚡ ⚡ ⚡
+- Small files may succeed because only 1 KMS call is needed  
+- Always check **IAM + CMK key policy** permissions for multipart uploads
+
 ---
 
