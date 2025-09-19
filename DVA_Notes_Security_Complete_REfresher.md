@@ -38,7 +38,7 @@ Use these notes for **revision + last-day exam prep**.
 | Concept | Explanation | Exam Tip |
 |---------|-------------|----------|
 | **Encryption at Rest** | Data stored encrypted (S3, EBS, RDS) | Default SSE-S3 is AES-256 |
-| **Encryption in Transit** | TLS/SSL → HTTPS | ACM issues certs for ELB, CloudFront, API GW |
+| **Encryption in Transit** | TLS/SSL → HTTPS | ACM issues certs for ELB, CloudFront, API gateway |
 | **AWS ACM / Private CA** | ACM: public certs <br> Private CA: internal org certs | ACM certs free for supported services |
 | **KMS Key Types** | - **AWS-managed key (aws/service-name)** → Auto-rotated yearly <br> - **Customer-managed CMK** → Full control, policies, rotation | *Gotcha*: Customer-managed = optional rotation |
 | **Client-side vs Server-side Encryption** | - Client-side → App encrypts before sending <br> - Server-side → AWS encrypts after receiving | SSE options: SSE-S3, SSE-KMS, SSE-C |
