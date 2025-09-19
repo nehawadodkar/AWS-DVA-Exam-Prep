@@ -93,7 +93,24 @@ Use these notes for **revision + last-day exam prep**.
 - **RBAC = Roles Bring Access Control**.  
 - **Bearer = “I bear a token” → temporary proof**.  
 - **KMS keys**: AWS = auto, Customer = manual (control).  
-- **Secrets Manager = Rotation, Parameter Store = Configuration**.  
+- **Secrets Manager = Rotation, Parameter Store = Configuration**.
+
+# STS vs Cognito User Pool – Minimalist Exam Notes
+
+| Feature        | STS (Security Token Service)                  | Cognito User Pool                   |
+|----------------|-----------------------------------------------|--------------------------------------|
+| Purpose        | Issues **temporary AWS credentials**          | Handles **user authentication** (sign-up/sign-in) |
+| What it gives  | Access Key, Secret Key, Session Token         | JWT tokens (ID, Access, Refresh)    |
+| Focus          | **Authorization** (access to AWS resources)   | **Authentication** (who the user is) |
+| Validity       | Short-term (15 min – 12 hrs)                  | Long-lived (refresh token up to 30 days) |
+| Typical use    | Cross-account access, role assumption         | App login (web/mobile, social, SAML, OIDC) |
+
+---
+
+🧠 **Memory Hack**:  
+- **User Pool = Users login**  
+- **STS = Short-Term AWS creds**
+
 
 ---
 
