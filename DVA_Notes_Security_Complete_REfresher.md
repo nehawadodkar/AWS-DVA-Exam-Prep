@@ -111,6 +111,23 @@ Use these notes for **revision + last-day exam prep**.
 - **User Pool = Users login**  
 - **STS = Short-Term AWS creds**
 
+- # Cognito Sync vs AppSync – Minimalist Notes
+
+| Feature        | Cognito Sync (Legacy)                        | AppSync                                |
+|----------------|----------------------------------------------|-----------------------------------------|
+| Purpose        | Sync **user data/preferences** across devices | Build **GraphQL APIs** for apps          |
+| What it syncs  | Key-value pairs (like settings, game scores)  | Any app data from DynamoDB, Lambda, RDS, etc. |
+| Scope          | **Per-user** data                            | **App-wide** data/API layer             |
+| Backend        | Uses Cognito Identity + datasets             | Managed **GraphQL service**             |
+| Status         | **Legacy / deprecated** → replaced by AppSync | Actively supported, modern choice        |
+
+---
+
+🧠 **Memory Hack**:  
+- **Cognito Sync → “tiny sync” (per-user prefs).**  
+- **AppSync → “app sync” (whole app’s data via GraphQL).**
+
+
 
 ---
 
