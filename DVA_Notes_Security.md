@@ -224,6 +224,22 @@ Mnemonic: **Data with DEK → DEK with KEK**.
 - SSE-S3: Simplest, default server-side encryption.  
 - Client-side: AWS is blind to plaintext.  
 
+## 🔒 SSL/TLS Certs – Exam Gotchas
+
+### ✅ Import Options
+- **ACM** → Preferred, free certs + import 3rd-party, auto-renew, works with ALB/CF/APIGW  
+- **IAM Cert Store** → Legacy, only if ACM not supported, supports 3rd-party, no auto-renew  
+
+### ❌ Not for Import
+- CloudFront → can only *use* ACM/IAM certs  
+- Cognito → identity only  
+- S3 → not usable for certs  
+
+### ⚡ Quick Recall
+- 3rd-party cert → **ACM (best) or IAM (legacy)**  
+- ACM = Managed / Auto-renew  
+- IAM = Fallback / Manual
+
 
 ---
 
