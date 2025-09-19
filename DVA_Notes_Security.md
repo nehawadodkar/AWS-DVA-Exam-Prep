@@ -267,10 +267,29 @@ Mnemonic: **Data with DEK → DEK with KEK**.
 
 
 ## 🔹 Lambda Authorizer (API Gateway)
-- Custom auth for API Gateway requests.
-- Types: **Token** (header/query) & **Request** (any request data).
-- Returns **IAM policy (Allow/Deny)**.
-- Can **cache results** to reduce Lambda calls.
+
+- **Purpose:** Custom authentication and authorization for API Gateway requests.
+  - Lets you implement logic beyond standard IAM roles or API keys.
+  
+- **Types:**
+  - **Token Authorizer:** Receives a single token (e.g., from `Authorization` header or query string). Good for JWT or OAuth tokens.
+  - **Request Authorizer:** Receives full request context (headers, query params, stage variables, etc.) for more complex access decisions.
+
+- **How it works:**
+  1. Client sends request to API Gateway.
+  2. API Gateway calls Lambda Authorizer.
+  3. Lambda returns an **IAM policy** (`Allow` or `Deny`) for the request.
+  4. API Gateway enforces the policy and forwards request if allowed.
+
+- **Features:**
+  - Can **cache results** to reduce Lambda calls and improve performance.
+  - Returns context values (`context` object) that can be passed to downstream Lambda.
+
+- **Exam Gotchas:**
+  - Must return a valid **policy with `Effect` and `Resource`**.
+  - If invalid token → return `Unauthorized`; otherwise API returns 403.
+  - Caching misconfiguration may allow invalid access if not careful.
+
 
 ---
 
