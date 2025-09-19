@@ -194,7 +194,7 @@ Mnemonic: **Data with DEK → DEK with KEK**.
 |-----------|------------------|----------------------|-----------------------|----------|
 | **SSE-S3** (S3 managed keys) | AWS (auto-managed) | In S3 (AWS-managed) | S3 automatically | “Easiest mode – just works if you have S3 perms.” |
 | **SSE-KMS** (KMS keys) | AWS KMS CMK (AWS or customer-managed) | In KMS | S3 (after calling KMS `Decrypt`) | Need `kms:Decrypt` + IAM perms. Watch cross-account gotchas. |
-| **SSE-C** (Customer-provided) | You (must supply key in headers for PUT & GET) | Not stored by S3 | S3 (derives encryption key using supplied key) | If you lose key → data unrecoverable. Must send key every time. |
+| **SSE-C** (Customer-provided) | You (must supply key in headers for PUT & GET) | Not stored by S3 | S3 (derives encryption key using supplied key - HMAC-style derivation process) | If you lose key → data unrecoverable. Must send key every time. |
 | **Client-side** | You (encrypt before upload) | You manage outside AWS | You (decrypt after download) | AWS only stores ciphertext. |
 
 ---
