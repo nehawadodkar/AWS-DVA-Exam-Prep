@@ -178,5 +178,52 @@ Mnemonic: **Data with DEK → DEK with KEK**.
 ## 🧠 Memory Trick
 **STS = Short-Term Security** → “I give you temporary keys, not permanent ones.”
 
+
+# 🔐 S3 Encryption & SigV4 – Exam Refresher
+
+## 1. What SigV4 Does (and Doesn’t Do)
+- **SigV4 (with salted HMAC)** = Signs API requests to prove identity + integrity.  
+- **It does NOT decrypt objects.**  
+- Decryption depends on the S3 encryption mode.
+
+---
+
+## 2. S3 Encryption Modes (Who supplies the key? Who decrypts?)
+
+| Mode      | Who supplies key? | Where is key stored? | Who decrypts on GET? | Exam Tip |
+|-----------|------------------|----------------------|-----------------------|----------|
+| **SSE-S3** (S3 managed keys) | AWS (auto-managed) | In S3 (AWS-managed) | S3 automatically | “Easiest mode – just works if you have S3 perms.” |
+| **SSE-KMS** (KMS keys) | AWS KMS CMK (AWS or customer-managed) | In KMS | S3 (after calling KMS `Decrypt`) | Need `kms:Decrypt` + IAM perms. Watch cross-account gotchas. |
+| **SSE-C** (Customer-provided) | You (must supply key in headers for PUT & GET) | Not stored by S3 | S3 (derives encryption key using supplied key) | If you lose key → data unrecoverable. Must send key every time. |
+| **Client-side** | You (encrypt before upload) | You manage outside AWS | You (decrypt after download) | AWS only stores ciphertext. |
+
+---
+
+## 3. SSE-C Deep Dive
+- Upload: `Object + key` → S3 salts/derives an internal key → encrypts → discards your key.  
+- Download: You send **same key** → S3 re-derives internal key → decrypts object.  
+- Wrong/missing key = object cannot be decrypted.  
+- **AWS never stores your raw key.**
+
+---
+
+## 4. Quick Mnemonics
+- **SSE-C** → *Customer supplies key every time*.  
+- **SSE-KMS** → *KMS decides if you can decrypt*.  
+- **SSE-S3** → *S3 takes care of everything*.  
+- **Client-side** → *Client does all the work*.  
+
+---
+
+## 5. Exam Gotchas
+- SigV4 = *signing*, not *encryption*.  
+- SSE-KMS requires BOTH:  
+  - IAM policy allowing S3 access.  
+  - KMS key policy allowing `kms:Decrypt`.  
+- SSE-C: AWS **never stores your key** → lose it = lose data.  
+- SSE-S3: Simplest, default server-side encryption.  
+- Client-side: AWS is blind to plaintext.  
+
+
 ---
 
