@@ -299,3 +299,10 @@ Mnemonic: **Data with DEK → DEK with KEK**.
 - Missing headers → browser blocks request (client-side).
 - Must configure in **API Gateway or S3**.
 
+## 🔗 Hotlinking Prevention
+
+- **Hotlinking:** Other sites link to your S3 files → you pay bandwidth.  
+- **Fix:** Use **CloudFront + Signed URLs/Cookies**.  
+- **Gotcha:**  
+  - S3 Pre-signed URL → object-level temp access.  
+  - CloudFront Signed URL/Cookie → best for hotlinking.
