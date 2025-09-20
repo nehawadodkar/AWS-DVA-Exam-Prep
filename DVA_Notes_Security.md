@@ -342,8 +342,8 @@ Mnemonic: **Data with DEK → DEK with KEK**.
 ⚡ **Exam Gotchas**
 
 - Role won’t work without both:
-- Trust policy → who can assume.
-- Permissions policy → what role can do.
+    - Trust policy → who can assume.
+    - Permissions policy → what role can do.
 - Cross-account access: trust policy must allow external account’s IAM principal.
 
 
