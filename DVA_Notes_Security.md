@@ -391,3 +391,8 @@ A: When you need **custom auth logic** (e.g., non-AWS identity provider, special
 - Response must return an **IAM policy** (Allow/Deny).  
 
 
+## 🔑 IAM Database Authentication (RDS)
+
+- Lets you connect to RDS (MySQL/PostgreSQL) using **IAM credentials** instead of DB passwords.
+- **⚡ Gotcha:** IAM permissions alone don’t grant DB access — the corresponding DB user must exist and have privileges; token expires in 15 min.
+
