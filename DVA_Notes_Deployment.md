@@ -74,3 +74,71 @@ Production / Dev stack updated
 - Always know **risk vs downtime trade-off** for each strategy.
 
 
+
+
+# 🔹 AWS Lambda – Detailed DVA Notes
+
+## Function Structure
+- **Handler:** Entry point of Lambda code  
+  - Format: `file_name.method_name` (Python: `lambda_function.lambda_handler`)  
+  - Tells Lambda which function to execute first
+- **Runtime:** Python, Node.js, Java, Go, .NET, etc.
+- **Execution Role:** IAM role Lambda assumes for accessing AWS services
+- **Environment Variables:** Key-value pairs; can be encrypted with KMS
+- **Memory & CPU:** Memory (128 MB – 10,240 MB); CPU scales with memory
+
+---
+
+## Deployment Package
+| Type | Max Size | Notes |
+|------|----------|------|
+| Zip file (direct upload) | 50 MB | Includes your code + dependencies |
+| Zip file (via S3) | 250 MB | Upload larger code via S3 |
+| Container image | 10 GB | Supports heavy dependencies, custom runtimes |
+
+- **Handler file must be at root of zip** (unless using subdirectories + proper path)
+- **Layers**: Shared libraries or code; max 5 layers, total 250 MB
+
+---
+
+## Execution & Timeout
+- **Timeout:** 1 sec – 15 min (900 sec max)
+- **Concurrency:** Reserved or provisioned concurrency controls number of simultaneous executions
+- **Cold start:** First invocation latency, higher for VPC-attached or large functions
+
+---
+
+## Event Sources
+- **Synchronous:** API Gateway, SDK calls, CloudWatch Logs → caller waits
+- **Asynchronous:** S3, SNS, EventBridge → Lambda invoked in background
+- **Polling:** SQS, DynamoDB Streams → Lambda polls events
+
+---
+
+## Security & Authorization
+- Execution Role (IAM) → must have **least privilege** for AWS services
+- Lambda Authorizer (API Gateway):
+  - Types: **Token** (header/query) or **Request** (any request data)
+  - Returns IAM policy (Allow/Deny)
+  - Can cache results to reduce calls
+
+---
+
+## Deployment Tools
+- **Console:** Quick, small functions
+- **SAM / CloudFormation:** Infrastructure as code
+- **Serverless Framework / CI/CD:** Automated pipelines
+- **Container images:** Large apps or custom runtime requirements
+
+---
+
+## ⚡ Gotchas / Exam Points
+- Max function size: **50 MB zip / 250 MB zip via S3 / 10 GB container**
+- **Handler format** must match your code file + function
+- Timeout **cannot exceed 15 min**
+- Cold start → VPC + large packages = slower
+- Reserved concurrency → may throttle invocations
+- **SAM `sync`** only for existing deployed stacks; **cannot deploy first-time functions**
+
+
+
