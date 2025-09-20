@@ -142,7 +142,7 @@ Mnemonic: **Data with DEK → DEK with KEK**.
 ---
 
 ## Exam Tips
-- KMS = **regional service** (keys don’t move between regions).  
+**- KMS = **regional service** (keys don’t move between regions). ** 
 - For **compliance/strict security**, use **Customer Managed Keys**.  
 - Envelope encryption = must-know scenario.  
 - For **performance** → always encrypt large data with **DEKs**, not directly with CMKs.  
