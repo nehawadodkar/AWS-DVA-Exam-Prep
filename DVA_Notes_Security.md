@@ -351,3 +351,14 @@ Mnemonic: **Data with DEK → DEK with KEK**.
 - **External access (on-prem / local machine / external apps):** Use **long-term AWS access keys** (stored in `~/.aws/credentials` or env vars).  
 
 ⚡ Gotcha: For on-prem/external, if possible use federation + AssumeRoleWithSAML/WebIdentity instead of static keys (best practice, avoids hardcoding).
+
+
+## 🪙 S3 Server-Side Encryption Headers (DVA Exam)
+
+| Encryption Type | Header(s) to Pass | Memory Hook 🧠 |
+|-----------------|------------------|----------------|
+| **SSE-S3** (Amazon-managed keys) | `x-amz-server-side-encryption: AES256` | "AES = Amazon Easy S3" → just one header, simple. |
+| **SSE-KMS (default key)** | `x-amz-server-side-encryption: aws:kms` | "KMS needs a Kickoff header" → must say aws:kms. |
+| **SSE-KMS (custom CMK)** | `x-amz-server-side-encryption: aws:kms`<br>`x-amz-server-side-encryption-aws-kms-key-id: <CMK ARN/alias>` | "KMS = Key ID Memory Stick" → needs **two headers** if you want your own key. |
+| **SSE-C (Customer-provided key)** | `x-amz-server-side-encryption-customer-algorithm: AES256`<br>`x-amz-server-side-encryption-customer-key: <Base64-encoded key>`<br>`x-amz-server-side-encryption-customer-key-MD5: <Base64-encoded MD5 of key>` | "C = Complicated" → 3 headers! Algo, Key, Key-MD5. |
+
