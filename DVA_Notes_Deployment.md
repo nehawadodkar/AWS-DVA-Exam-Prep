@@ -114,3 +114,19 @@
 - Cold start → VPC + large packages = slower
 - Reserved concurrency → may throttle invocations
 - **SAM `sync`** only for existing deployed stacks; **cannot deploy first-time functions**
+
+# 🔹 AWS Lambda Exceptions – DVA Notes (with Quick-Fix Hints)
+
+| Exception Name                     | Cause / Scenario                                                | Exam Hook / Notes                                      | Quick-Fix / Hint                                           |
+|-----------------------------------|-----------------------------------------------------------------|--------------------------------------------------------|------------------------------------------------------------|
+| **InvalidParameterValueException** | Invalid memory, timeout, runtime, or other parameter values    | Common for misconfigured Lambda function settings    | Check memory, timeout, and runtime in function config     |
+| **ResourceNotFoundException**      | Lambda function, alias, or layer not found                     | Check function name, alias, or layer ARN             | Verify ARN/name; ensure resource exists                   |
+| **AccessDeniedException**          | IAM role lacks required permissions                             | Often seen with S3, DynamoDB, KMS access             | Update execution role with required permissions          |
+| **KMSAccessDeniedException**       | Missing KMS permissions for DEK/Encrypt/Decrypt               | Happens when using encrypted env vars or SSE-KMS     | Add `kms:Decrypt` / `kms:GenerateDataKey*` to role       |
+| **KMSDisabledException**           | KMS key disabled or deleted                                     | Encryption fails for Lambda env vars or S3 SSE-KMS   | Enable KMS key or select a different active key          |
+| **ThrottlingException**            | Too many concurrent invocations or API requests                 | Use reserved/provisioned concurrency                 | Increase concurrency limits or retry after backoff       |
+| **CodeStorageExceededException**   | Deployment package exceeds storage quota                        | Max 50 MB zip direct / 250 MB via S3 / 10 GB container | Reduce package size or use S3/container image           |
+| **EC2SubnetLimitExceeded / ENILimitExceeded** | Lambda in VPC exceeds ENI / subnet limits                       | Happens for VPC-connected Lambdas                     | Reduce concurrency, increase subnet/IP allocation        |
+| **ResourceConflictException**      | Attempt to update resource already being updated or in conflict | Rare, but possible with concurrent stack updates     | Retry later or avoid simultaneous updates               |
+| **ServiceException / InternalServerError** | AWS internal error, retryable                                     | Often transient; retry recommended                   | Retry with exponential backoff                            |
+
