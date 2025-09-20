@@ -56,6 +56,9 @@ Production / Dev stack updated
 
 
 
+Deployment types
+
+
 
 # 🔹 AWS Deployment Strategies – DVA Notes
 
@@ -75,4 +78,9 @@ Production / Dev stack updated
 - **EC2 / ECS:** Rolling or Immutable recommended for zero-downtime.  
 - **SAM:** Typically uses **in-place** or **canary** via CodeDeploy.  
 - Always know **risk vs downtime trade-off** for each strategy.
+
+
+
+
+
 
