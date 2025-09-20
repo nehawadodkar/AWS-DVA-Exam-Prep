@@ -9,24 +9,34 @@
 
 ---
 
-## Envelope Encryption
-- **Two-layer encryption**:
-  1. **Data Key (DEK):** encrypts the actual data (fast, per-object key)  
-  2. **Key Encryption Key (KEK):** encrypts the DEK (strong, centrally managed, stored in **KMS**)  
+## 🔐 Envelope Encryption
 
-**How it works:**  
-- Data → encrypted with DEK → ciphertext  
-- DEK → encrypted with KEK → stored safely  
-- Decrypt: KEK → DEK → data  
+- **Two-layer encryption:**  
+  - **Data Key (DEK):** encrypts actual data (fast, per-object key).  
+  - **Key Encryption Key (KEK/CMK):** encrypts the DEK (stored in KMS).  
 
-**Benefits:**  
-- Secure key management, scalable, allows DEK rotation  
-- Used in **S3 SSE-KMS**, **EBS**, **RDS encryption**
+- **How it works (AWS API calls):**  
+  1. App calls **KMS → `GenerateDataKey`**  
+     - Returns: **Plaintext DEK** + **Encrypted DEK**.  
+  2. **Plaintext DEK** → used in memory to encrypt data (e.g., with AES) → discarded.  
+  3. Store **Encrypted DEK** with the ciphertext.  
+  4. To decrypt:  
+     - App calls **KMS → `Decrypt`** with Encrypted DEK.  
+     - KMS uses KEK to return **Plaintext DEK**.  
+     - App uses DEK to decrypt the data.  
 
-**⚡ Gotcha / Mnemonic:**  
-- Envelope Encryption = **“Lock the key, then lock the data”**  
-- KEK = stored in **KMS**, never leaves unencrypted  
-- DEK = per-object, encrypted by KEK  
+- **Benefits:**  
+  - Secure key management.  
+  - Scalable (per-object DEK).  
+  - DEK rotation possible.  
+  - Used in **S3 SSE-KMS, EBS, RDS encryption**.  
+
+- **Gotcha / Mnemonic:**  
+  - *“Lock the key, then lock the data.”*  
+  - KEK = in KMS, never leaves unencrypted.  
+  - DEK = temporary plaintext; only **encrypted DEK** is stored.  
+  - ⚡ **Exam Tip:** KMS can only directly encrypt ≤ **4 KB** → larger data must use **Envelope Encryption**.
+
 
 ---
 
