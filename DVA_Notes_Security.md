@@ -29,7 +29,8 @@
   - Secure key management.  
   - Scalable (per-object DEK).  
   - DEK rotation possible.  
-  - Used in **S3 SSE-KMS, EBS, RDS encryption**.  
+  - Used in **S3 SSE-KMS, EBS, RDS encryption**.
+  - 
 
 - **Gotcha / Mnemonic:**  
   - *“Lock the key, then lock the data.”*  
@@ -336,3 +337,9 @@ Mnemonic: **Data with DEK → DEK with KEK**.
 - Trust policy → who can assume.
 - Permissions policy → what role can do.
 - Cross-account access: trust policy must allow external account’s IAM principal.
+
+
+- **Cross-account access (AWS → AWS):** Use **IAM Roles + Trust Policies**.  
+- **External access (on-prem / local machine / external apps):** Use **long-term AWS access keys** (stored in `~/.aws/credentials` or env vars).  
+
+⚡ Gotcha: For on-prem/external, if possible use federation + AssumeRoleWithSAML/WebIdentity instead of static keys (best practice, avoids hardcoding).
