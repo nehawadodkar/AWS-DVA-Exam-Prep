@@ -97,7 +97,8 @@
 3. Encrypt DEK with **KMS Key (KEK)**.  
 4. Store encrypted DEK alongside ciphertext.  
 
-**⚡ Gotcha:** *Data is never encrypted directly with the KMS key — only with DEKs.*
+**⚡ Gotcha:** Data is *usually* encrypted via DEKs (Envelope Encryption).  
+KMS can directly encrypt small data (≤ 4 KB) with `Encrypt`, but this is rare in practice.
 
 Mnemonic: **Data with DEK → DEK with KEK**.
 
