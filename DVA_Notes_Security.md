@@ -329,18 +329,6 @@ Mnemonic: **Data with DEK → DEK with KEK**.
 - **Trust Policy:** *Who can wear the jacket* (assume role).  
 - **Permissions Policy:** *What the jacket lets you do* (role’s rights once assumed).  
 
-### Example – EC2 assumes a role
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": { "Service": "ec2.amazonaws.com" },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
 
 ⚡ **Exam Gotchas**
 
