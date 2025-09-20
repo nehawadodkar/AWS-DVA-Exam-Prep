@@ -1,3 +1,6 @@
+
+
+
 # Encryption Notes - DVA Exam Quick Revision
 
 ## AES-256
@@ -361,4 +364,30 @@ Mnemonic: **Data with DEK → DEK with KEK**.
 | **SSE-KMS (default key)** | `x-amz-server-side-encryption: aws:kms` | "KMS needs a Kickoff header" → must say aws:kms. |
 | **SSE-KMS (custom CMK)** | `x-amz-server-side-encryption: aws:kms`<br>`x-amz-server-side-encryption-aws-kms-key-id: <CMK ARN/alias>` | "KMS = Key ID Memory Stick" → needs **two headers** if you want your own key. |
 | **SSE-C (Customer-provided key)** | `x-amz-server-side-encryption-customer-algorithm: AES256`<br>`x-amz-server-side-encryption-customer-key: <Base64-encoded key>`<br>`x-amz-server-side-encryption-customer-key-MD5: <Base64-encoded MD5 of key>` | "C = Complicated" → 3 headers! Algo, Key, Key-MD5. |
+
+
+## 🔑 Lambda Authorizer (Custom Authorizer)
+
+**Q: What is a Lambda Authorizer?**  
+A: A Lambda function that API Gateway calls to control access to APIs before requests reach the backend.
+
+**Q: What does it check?**  
+A: Custom logic like headers, bearer/JWT tokens, API keys, or anything you define.
+
+**Q: Where does it run in the flow?**  
+A: Runs **at the Gateway** → decides if the request can pass through to the backend (Lambda, HTTP service, etc.).
+
+**Q: What happens if authorization fails?**  
+A: API Gateway rejects the request; backend is never invoked.
+
+**Q: When should you use Lambda Authorizer?**  
+A: When you need **custom auth logic** (e.g., non-AWS identity provider, special token validation).
+
+---
+
+### ⚡ Gotcha
+- **Not** for “authorizing Lambda directly.”  
+- It’s the **gatekeeper at API Gateway**.  
+- Response must return an **IAM policy** (Allow/Deny).  
+
 
