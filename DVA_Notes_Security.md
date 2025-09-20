@@ -316,3 +316,35 @@ Mnemonic: **Data with DEK → DEK with KEK**.
 - **Gotcha:**  
   - S3 Pre-signed URL → object-level temp access.  
   - CloudFront Signed URL/Cookie → best for hotlinking.
+
+
+
+## 🛡️ Trust Policies (IAM Roles)
+
+- **What:** JSON policy attached to a **Role**, defines **who can assume the role**.  
+- **Action:** Always includes `sts:AssumeRole` (or `AssumeRoleWithWebIdentity`, `AssumeRoleWithSAML`).  
+- **Principal:** Specifies *who/what* can assume (e.g., `ec2.amazonaws.com`, another AWS account, IAM user).  
+
+### 🔑 Trust vs. Permissions Policy
+- **Trust Policy:** *Who can wear the jacket* (assume role).  
+- **Permissions Policy:** *What the jacket lets you do* (role’s rights once assumed).  
+
+### Example – EC2 assumes a role
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": { "Service": "ec2.amazonaws.com" },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+
+⚡ **Exam Gotchas**
+
+- Role won’t work without both:
+- Trust policy → who can assume.
+- Permissions policy → what role can do.
+- Cross-account access: trust policy must allow external account’s IAM principal.
