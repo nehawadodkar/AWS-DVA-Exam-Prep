@@ -56,29 +56,23 @@ Production / Dev stack updated
 
 
 
-Deployment types
+🔹 AWS Deployment Strategies – DVA Notes
+Strategy	Use Case	Key Features	Services / Notes	Gotchas / Exam Hook
+In-place Deployment	Update existing Lambda function or app	Old version replaced by new version	Lambda console, SAM, CLI	Temporary downtime possible; old version overwritten
+Blue/Green Deployment	Minimize downtime; test new version	Deploy new version alongside old; switch traffic	CodeDeploy, Lambda aliases, Elastic Beanstalk	Can roll back easily by redirecting traffic to old version
+Canary Deployment	Gradual rollout	Shift small % of traffic to new version, then increase	Lambda + CodeDeploy, API Gateway stage variables	Useful for testing small impact before full rollout
+All-at-once Deployment	Simple, small apps	Deploy everything at once	CloudFormation, SAM, Lambda	Risky for critical production apps; full downtime if errors
+Rolling Deployment	Large fleet of EC2 / ECS	Update instances in batches	Auto Scaling Groups, ECS services	Requires batch size planning; avoids full outage
+Immutable Deployment	Prevent downtime / rollback safely	Launch new instances, switch, terminate old	Auto Scaling Groups, ECS, Beanstalk	More resource-heavy; safer than in-place
+⚡ Exam Tips
 
+Lambda / Serverless: Blue/Green or Canary preferred for production.
 
+EC2 / ECS: Rolling or Immutable recommended for zero-downtime.
 
-# 🔹 AWS Deployment Strategies – DVA Notes
+SAM: Typically uses in-place or canary via CodeDeploy.
 
-| Strategy | Use Case | Key Features | Services / Notes | Gotchas / Exam Hook |
-|----------|---------|-------------|-----------------|------------------|
-| **In-place Deployment** | Update existing Lambda function or app | Old version replaced by new version | Lambda console, SAM, CLI | Temporary downtime possible; old version overwritten |
-| **Blue/Green Deployment** | Minimize downtime; test new version | Deploy new version alongside old; switch traffic | CodeDeploy, Lambda aliases, Elastic Beanstalk | Can roll back easily by redirecting traffic to old version |
-| **Canary Deployment** | Gradual rollout | Shift small % of traffic to new version, then increase | Lambda + CodeDeploy, API Gateway stage variables | Useful for testing small impact before full rollout |
-| **All-at-once Deployment** | Simple, small apps | Deploy everything at once | CloudFormation, SAM, Lambda | Risky for critical production apps; full downtime if errors |
-| **Rolling Deployment** | Large fleet of EC2 / ECS | Update instances in batches | Auto Scaling Groups, ECS services | Requires batch size planning; avoids full outage |
-| **Immutable Deployment** | Prevent downtime / rollback safely | Launch new instances, switch, terminate old | Auto Scaling Groups, ECS, Beanstalk | More resource-heavy; safer than in-place |
-
----
-
-### ⚡ Exam Tips
-- **Lambda / Serverless:** Blue/Green or Canary preferred for production.  
-- **EC2 / ECS:** Rolling or Immutable recommended for zero-downtime.  
-- **SAM:** Typically uses **in-place** or **canary** via CodeDeploy.  
-- Always know **risk vs downtime trade-off** for each strategy.
-
+Always know risk vs downtime trade-off for each strategy.
 
 
 
