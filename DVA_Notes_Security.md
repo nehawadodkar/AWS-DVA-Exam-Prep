@@ -104,14 +104,21 @@ Mnemonic: **Data with DEK → DEK with KEK**.
 
 ---
 
-## How Keys Are Used
+## How Keys Are Used (Envelope Encryption)
+
 - **Encrypt API call:**  
-  - Send plaintext to KMS (small amounts only, up to 4KB).  
-  - Not scalable for large data.  
+  - Send plaintext to KMS (small amounts only, ≤ 4 KB).  
+  - Not scalable for large data.
+
 - **GenerateDataKey API call:**  
   - KMS returns **plaintext DEK + encrypted DEK**.  
-  - Use plaintext DEK locally to encrypt big data, then discard it.  
-  - Store encrypted DEK with your data.  
+  - Use plaintext DEK locally to encrypt big data → discard plaintext.  
+  - Store **encrypted DEK** with ciphertext.
+
+- **Decrypt API call:**  
+  - Send **encrypted DEK** to KMS → KMS decrypts with KEK (CMK).  
+  - KMS returns **plaintext DEK** → use it to decrypt your data locally.  
+  - Discard plaintext DEK after use.
 
 ---
 
