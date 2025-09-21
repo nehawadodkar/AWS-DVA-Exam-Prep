@@ -132,6 +132,9 @@ Comprehensive notes on AWS Lambda concepts for deployment, automation, and exam 
 - **DLQ** = Failure mailbox.  
 - **Destinations** = Where async results go.  
 - **Package** = Zip (250 MB) or Image (10 GB).  
-- **Timeout** = 15 min max.  
-
----
+- **Timeout** = 15 min max.
+- 
+## 1️⃣3️⃣ Lambda Handler
+- Entry point for Lambda execution; receives `event` (input) and `context` (runtime info).  
+- Sync → return value sent to caller; Async → use Destinations/DLQ.  
+- Handler name must match runtime; avoid heavy init outside handler to reduce cold starts.
