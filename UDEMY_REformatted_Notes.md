@@ -712,4 +712,344 @@
 - **Amazon Cognito** – Serverless user authentication & authorization
 
 
+# AWS Serverless & Other AWS Services – DVA Exam Notes
+
+---
+
+## 21️⃣ AWS Serverless: Lambda
+
+### Lambda & CloudWatch Events / EventBridge
+- EventBridge + Lambda can be used to create cron-like jobs (serverless).
+
+### Lambda Event Source Mapping
+- Lets Lambda poll streams/queues (SQS, Kinesis, DynamoDB Streams) and invoke functions with batches of records.
+- Push-based services (S3, API Gateway, EventBridge, SNS) trigger Lambda directly, no mapping needed.
+
+**Exam Trick:**
+- Streams + Queues → Needs event source mapping  
+- Events/Notifications → Direct trigger, mapping not needed
+
+### Lambda Destinations
+- Route results of asynchronous Lambda executions.
+- On Success / On Failure → SNS, SQS, EventBridge, or another Lambda.
+- More flexible than DLQ (DLQ only handles failures with SQS/SNS).
+
+### Lambda Permissions
+- **Execution Role:** Lambda’s permissions to AWS services  
+- **Resource-based Policy:** Who can invoke the Lambda function
+
+### Lambda Monitoring & X-Ray
+- Logs automatically sent to CloudWatch Logs
+- Use X-Ray for tracing execution & performance
+
+### Lambda@Edge & CloudFront Functions
+- **Lambda@Edge:** Runs at CloudFront Edge locations, replicated automatically  
+  Use cases: auth at edge, dynamic content routing, URL rewrites, header manipulation  
+  Limited runtimes (Node.js, Python), higher latency than CloudFront Functions
+- **CloudFront Functions:** Lightweight JS functions at Edge, millisecond execution  
+  Best for high-volume, simple logic: URL rewrites, header manipulation, basic auth  
+  Cannot access other AWS services
+
+**Exam Tip:**  
+- High volume, lightweight header/URL logic → CloudFront Functions  
+- Personalization, AWS service access, heavier compute → Lambda@Edge  
+- Backend/regional service → plain Lambda
+
+### Lambda Function Performance
+- By default, not in VPC → can reach internet & AWS services  
+- In VPC + private subnets → loses internet access unless NAT Gateway added  
+- CPU-bound functions → increase RAM  
+- Timeout: Default 3 sec, max 900 sec (15 min)  
+- Execution context: temporary runtime reused across warm starts → DB connections outside handler can be reused
+
+### Lambda Layers & Custom Runtimes
+- **Layers:** Share code/dependencies across functions (max 5 layers)  
+- **Custom Runtimes:** Your own language/runtime via a layer with bootstrap file
+
+### Lambda File Systems
+- **Ephemeral Storage (`/tmp`):** 512 MB default, up to 10 GB, lasts only for function execution  
+- **Persistent Storage:** S3 (object storage), EFS (shared, up to PB scale)  
+
+### Lambda Concurrency
+- **Reserved concurrency:** Guarantees max concurrent executions; extra invocations wait/fail
+
+### Lambda & CloudFormation
+- Package dependencies with function (zip) or use Layers  
+- Python/Node.js: `pip install -t .` in project folder, zip & upload
+
+### Lambda Container Images
+- Supports container images up to 10 GB (ECR)  
+- Use AWS base images or custom images implementing Runtime API  
+- Test locally with Runtime Interface Emulator  
+- Best practices: multi-stage builds, cache stable layers, use single ECR repo
+
+### Lambda Versions & Aliases
+- **Versions:** Immutable snapshots  
+- **Aliases:** Pointers to versions + traffic splitting (e.g., PROD → v5, BETA → v6 10%)
+
+### Lambda Limits
+- Memory: 128 MB – 10 GB  
+- Timeout: max 900 sec  
+- Env vars: 4 KB max  
+- `/tmp` storage: 10 GB  
+- Concurrency: default 1,000 (request increase if needed)  
+- Code package: 50 MB compressed / 250 MB uncompressed  
+- Larger dependencies → use Layers or container images
+
+### Lambda Best Practices
+- Heavy work outside handler (DB connections, SDK)  
+- Use environment variables, encrypt sensitive ones with KMS  
+- Minimize deployment package → use Layers  
+- Avoid recursion (Lambda calling itself)
+
+### Lambda Function URL
+- Built-in HTTPS endpoint → direct Lambda invoke, no API Gateway needed  
+- Auth: NONE (public) or AWS_IAM  
+- Optional CORS  
+- Limits: Same as Lambda (memory, timeout, payload, concurrency)
+
+### Lambda vs API Gateway
+| Feature | Function URL | API Gateway |
+|---------|-------------|------------|
+| Setup | Quick, built-in | More configuration |
+| Auth | NONE / AWS_IAM | IAM, Cognito, custom authorizers |
+| Features | Basic HTTP invoke, CORS | Transform requests/responses, caching, throttling, stages |
+| Use case | Single Lambda endpoint | Complex API routing & versioning |
+| Cost | Lightweight | More features, higher cost |
+
+### Lambda & CodeGuru Integration
+- Monitor & optimize serverless app performance using CodeGuru Profiler
+
+### Lambda Deployment Methods
+- **All-at-once / Big Bang:** Fast, risky  
+- **Canary:** Small subset first, then expand  
+- **Linear/Rolling:** Gradual shifts  
+- **Blue/Green:** Parallel new version, instant switch  
+- **Immutable:** Deploy to new servers/containers, rollback safe  
+- **A/B Testing:** Route traffic to different versions
+
+---
+
+## 22️⃣ AWS Serverless: DynamoDB
+
+### Basics
+- Fully managed NoSQL DB (key-value & document store)  
+- Scales automatically (On-Demand) or via provisioned capacity  
+- Highly available & durable (multi-AZ)  
+
+**Key Concepts:**
+- Table → collection of items  
+- Item → row/document  
+- Attributes → key-value pairs  
+- Primary Key → Partition Key (+ optional Sort Key)  
+- Secondary Indexes:
+  - **GSI:** Any attribute as PK/SK, cross-partition  
+  - **LSI:** Same partition key, different sort key  
+
+### Capacity & Throughput
+- **Provisioned:** WCU = 1 write/sec/1 KB, RCU = 1 read/sec/4 KB (strong), 2 reads/sec/4 KB (eventual)  
+- **On-Demand:** Auto-scaling, pay per request  
+- **Transactions:** ACID, 2x capacity
+
+### DynamoDB Streams
+- Captures item-level changes (Insert, Modify, Remove)  
+- Trigger Lambda per batch of changes  
+- Requires Lambda role with DynamoDB read access
+
+### TTL (Time To Live)
+- Auto-delete items after expiration timestamp  
+- No WCU consumed  
+- Deletes appear in Streams
+
+### DynamoDB Writes
+- Concurrent writes → last write wins  
+- Conditional writes (optimistic locking)  
+- Atomic counters → increment/decrement atomically  
+- Batch writes → multiple items in one operation
+
+### CLI Tips
+- `--projection-expression` → retrieve specific attributes  
+- `--filter-expression` → client-side filtering  
+- Pagination: `--page-size`, `--max-items`, `--starting-token`
+
+### Large Objects / S3
+- Store large objects in S3, metadata in DynamoDB  
+- Trigger Lambda on upload to update DynamoDB metadata
+
+### Sharding
+- Avoid hot partitions → add random prefix/suffix to partition key
+
+### Security
+- IAM full access control  
+- VPC endpoints for private access  
+- Encryption: At rest (KMS), in transit (SSL/TLS)  
+- Backup: PITR, manual backup/restore  
+- Global Tables: multi-region replication (requires Streams)  
+- Fine-grained access via federated login + conditions
+
+### Session State / Caching
+| Storage | Description | Use Case |
+|---------|------------|----------|
+| DynamoDB | Serverless key-value | Auto-scaling sessions, durable |
+| ElastiCache | In-memory (Redis/Memcached) | Low-latency session store |
+| EFS | Shared file system | File-based session state |
+| EBS / Instance Store | Local storage | Single-instance cache |
+| S3 | Object storage | Not ideal for session state |
+
+---
+
+## 23️⃣ AWS Serverless: API Gateway
+
+### Architecture
+- Fully managed service for creating, publishing, monitoring APIs (REST, HTTP, WebSocket)  
+- Acts as "front door" to backend services (Lambda, EC2, Step Functions, 3rd-party APIs)  
+
+**API Types:**
+- REST → Feature-rich, usage plans, request/response transformations  
+- HTTP → Lightweight, lower latency/cost  
+- WebSocket → Real-time, stateful, full-duplex
+
+**Core Concepts:**
+- Resources & Methods → resource tree mapped to backend  
+- Stages → dev/test/prod  
+- Endpoints → Edge-optimized, Regional, Private  
+
+**Security Options:**
+- IAM policies, Lambda authorizers, Cognito, AWS WAF  
+- SigV4 signing for authenticated requests
+
+**Performance & Traffic Management:**
+- Throttling, caching, canary deployments  
+- Monitoring via CloudWatch, CloudTrail, X-Ray
+
+**CI/CD & IaC:**
+- CloudFormation, AWS SAM, CDK  
+- Manage multiple stages, custom domains, traffic shifting
+
+**Exam Focus:**
+- REST vs HTTP vs WebSocket  
+- Secure access patterns  
+- CORS configuration  
+- Backend integration  
+- Deployment automation
+
+---
+
+## 24️⃣ AWS CI/CD Services
+- **CodeCommit:** Git repo in AWS  
+- **CodeBuild:** Build/test automation  
+- **CodeDeploy:** Deployment, including Blue/Green  
+- **CodePipeline:** CI/CD pipeline automation  
+- **CodeArtifact:** Dependency repository  
+- **CodeGuru:** ML-based code insights  
+- **CloudShell:** Quick browser CLI
+
+---
+
+## 25️⃣ AWS SAM – Serverless Application Model
+
+### Overview
+- Framework on top of CloudFormation for serverless apps  
+- Focused on Lambda, API Gateway, DynamoDB, Step Functions, S3, EventBridge  
+- `template.yaml` → defines serverless resources  
+- Shorthand:
+  - `AWS::Serverless::Function` → Lambda  
+  - `AWS::Serverless::Api` → API Gateway  
+  - `AWS::Serverless::Table` → DynamoDB
+
+### CLI Commands
+- `sam build` → build dependencies  
+- `sam local invoke` → run Lambda locally  
+- `sam local start-api` → run API Gateway + Lambda locally  
+- `sam package` → package & upload to S3  
+- `sam deploy --guided` → deploy via CloudFormation
+
+### Deployment & CI/CD
+- CodeDeploy traffic shifting: Canary, Linear, All-at-once  
+- Can integrate with CodePipeline
+
+### SAM Policy Templates
+- Prebuilt IAM policy snippets in `template.yml`  
+- Examples:
+  - `S3ReadPolicy` → Lambda reads S3 bucket  
+  - `SQSPollerPolicy` → Lambda polls SQS  
+  - `DynamoDBCrudPolicy` → CRUD on DynamoDB  
+  - `SNSPublishPolicy` → Publish messages to SNS  
+  - `VPCAccessPolicy` → Access VPC resources
+
+---
+
+## 26️⃣ AWS CDK (Cloud Development Kit)
+- Define infrastructure using programming languages (Python, JS, Java, TS, C#)  
+- CDK converts code to CloudFormation templates  
+- Benefits: loops, conditions, functions, easier maintenance  
+- Downside: extra layer to learn, still depends on CloudFormation
+
+---
+
+## 27️⃣ Cognito
+
+### Overview
+- Identity & Access Management for apps (web & mobile)  
+- Handles sign-up, sign-in, MFA, password reset
+
+### Components
+- **User Pools:** Authentication, issues JWT tokens, supports social logins & SAML  
+- **Identity Pools:** Authorization, grants temporary AWS credentials via STS  
+- Map roles to authenticated vs unauthenticated users
+
+### Exam Tip
+- IAM → internal AWS users  
+- Cognito → external app users  
+- User Pool = Auth  
+- Identity Pool = AuthZ + AWS creds
+
+---
+
+## 29️⃣ Advanced Identity
+
+### STS
+- Security Token Service → create temporary credentials  
+- Key APIs: `AssumeRole`  
+- Federation: external IdPs (SAML, Cognito, AD)  
+- Common in CI/CD, cross-account Lambda, federated logins
+
+### AWS Directory Services
+- Managed Microsoft AD in AWS  
+- Flavors: Managed Microsoft AD, AD Connector, Simple AD  
+- Integrations: EC2 Windows, Workspaces, QuickSight, RDS SQL Server  
+- Exam Hook: Windows workloads needing domain join → Directory Service
+
+---
+
+## 30️⃣ AWS Security & Encryption
+
+### Encryption Overview
+- **In Transit:** TLS/SSL  
+- **Server-Side Encryption (SSE):** AWS manages encryption  
+- **Client-Side Encryption:** You manage encryption keys
+
+**Exam Tip:**  
+- “Don’t trust AWS with keys” → Client-Side  
+- “Easiest/managed” → Server-Side  
+- Network transfer security → In Transit
+
+---
+
+## 31️⃣ AWS Other Services
+
+| Service | Description | Notes |
+|---------|------------|------|
+| Athena | Serverless SQL query on S3 | BI, analytics, CloudTrail/VPC logs |
+| Macie | Data security, PII detection | ML-based, compliance (GDPR/HIPAA) |
+| SES | Send emails at scale | SMTP/API, sandbox vs prod |
+| SNS | Pub/Sub messaging | Subscribers: SQS, Lambda, HTTP/S, Email, SMS |
+| OpenSearch | Managed Elasticsearch fork | Search, log analytics, CloudWatch/Kibana dashboards |
+| MSK | Managed Kafka clusters | Real-time streaming, IAM & CloudWatch integration |
+| ACM | SSL/TLS certs | Free, auto-renewal, CloudFront/ELB/API Gateway integration |
+| AppConfig | Application config management | Feature flags, gradual rollouts, CloudWatch integration |
+| CloudWatch AppInsights | Monitor apps | Detect anomalies, errors, bottlenecks |
+
+
+
 
