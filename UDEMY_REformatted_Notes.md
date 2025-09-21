@@ -439,3 +439,63 @@
 - **Load Balancer:** cannot change ELB type on existing env → create new env → swap traffic  
 - **RDS:** snapshot, enable deletion protection → create new env without RDS → point app → shift traffic → terminate old env
 
+- # ⚡ AWS CloudFormation Cheat Sheet
+
+## 1️⃣ Stacks
+- Collection of AWS resources managed as a single unit.
+- Create, update, delete stacks via templates.
+
+## 2️⃣ Templates
+- JSON/YAML file defining resources, parameters, outputs, etc.
+- Mandatory section: `Resources` (AWS components).
+- Use `!Ref` to reference parameters/resources.
+- Resource type format: `AWS::Service::ResourceType`.
+- Check AWS documentation for resource properties.
+
+## 3️⃣ Parameters
+- User inputs to customize templates.
+- Types: `String`, `Number`, `CommaDelimitedList`, AWS-specific, SSM Parameter.
+- Validation: `AllowedValues`, `AllowedPattern`, `Min/Max`, `NoEcho`.
+- Reference with `!Ref ParameterName`.
+
+## 4️⃣ Outputs
+- Optional section to export values (e.g., VPC ID).
+- Exported outputs can be imported into other stacks with `Fn::ImportValue`.
+- Enables stack-to-stack communication.
+
+## 5️⃣ Conditions
+- Control resource/output creation based on conditions (e.g., environment type).
+- Functions: `Fn::Equals`, `Fn::And`, `Fn::Or`, `Fn::Not`.
+- Apply with `Condition: ConditionName` on resources/outputs.
+
+## 6️⃣ Deletion Policy
+- Controls what happens on resource/stack deletion.
+- Types:
+  - `Delete` (default) – resource is deleted.
+  - `Retain` – resource preserved.
+  - `Snapshot` – snapshot created before deletion (DBs, EBS).
+- Note: S3 bucket delete fails if not empty.
+
+## 7️⃣ Stack Policies
+- JSON policy controlling update actions on resources.
+- Protect critical resources from accidental updates.
+- Default denies updates unless explicitly allowed.
+
+## 8️⃣ Termination Protection
+- Prevents accidental stack deletion.
+- Must disable before deleting the stack.
+
+## 9️⃣ Service Roles
+- IAM role dedicated to CloudFormation.
+- Allows CFN to create/update/delete resources using role permissions.
+- Users need `iam:PassRole` to delegate role.
+
+## 1️⃣0️⃣ Custom Resources
+- Extend CloudFormation with Lambda-backed custom logic.
+- Useful for unsupported resources or custom provisioning (e.g., empty S3 before delete).
+- Defined with:
+  ```yaml
+  Type: Custom::ResourceName
+  ServiceToken: <Lambda ARN>
+
+
