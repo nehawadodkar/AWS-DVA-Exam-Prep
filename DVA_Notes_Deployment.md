@@ -130,3 +130,13 @@
 | **ResourceConflictException**      | Attempt to update resource already being updated or in conflict | Rare, but possible with concurrent stack updates     | Retry later or avoid simultaneous updates               |
 | **ServiceException / InternalServerError** | AWS internal error, retryable                                     | Often transient; retry recommended                   | Retry with exponential backoff                            |
 
+
+
+## AWS CloudFormation Helper Scripts
+
+AWS CloudFormation provides Python scripts to help set up and manage EC2 instances in your stack:
+
+- **cfn-init** → Install software, create files, and start services based on resource metadata.  
+- **cfn-signal** → Send signals to a CreationPolicy or WaitCondition to tell other resources that this one is ready.  
+- **cfn-get-metadata** → Get metadata for a resource or a specific key.  
+- **cfn-hup** → Watch for metadata updates and run custom hooks when changes happen.
