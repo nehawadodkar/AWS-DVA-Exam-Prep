@@ -140,3 +140,11 @@ AWS CloudFormation provides Python scripts to help set up and manage EC2 instanc
 - **cfn-signal** → Send signals to a CreationPolicy or WaitCondition to tell other resources that this one is ready.  
 - **cfn-get-metadata** → Get metadata for a resource or a specific key.  
 - **cfn-hup** → Watch for metadata updates and run custom hooks when changes happen.
+
+## ⚡ SAM Deploy Gotchas
+
+- `sam deploy` **automates build, upload to S3, and stack deployment**.  
+- Must have **S3 bucket, stack name, and region configured** (via `--guided` or `samconfig.toml`).  
+- Changes in local code/templates **won’t deploy** if `--guided` or config not updated.  
+- For large apps, ensure **artifact size < S3/Lambda limits**.
+
