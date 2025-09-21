@@ -268,3 +268,174 @@
 
 ## Security
 - IAM policies, bucket policies
+- 
+
+# ⚡ AWS Notes – CloudFront, ECS/ECR/Fargate, Elastic Beanstalk
+
+---
+
+## 15️⃣ CloudFront
+
+### Overview
+- Content Delivery Network (CDN)  
+- Caches content at **edge locations** → reduces latency  
+- Provides **DDoS attack prevention**  
+- **Origins** = backends connected to CloudFront  
+
+### CloudFront vs S3 Cross-Region Replication (CRR)
+| Feature | CloudFront | S3 CRR |
+|---------|------------|--------|
+| Purpose | Speeds up content delivery | Replicates data across regions |
+| How | Uses global edge locations to cache S3 content | Automatically copies objects to another region |
+| Use Case | Static websites, images, videos | Backup, disaster recovery, compliance |
+| Key Difference | Improves delivery speed, **does not backup data** | Provides replication and backup, **does not improve speed** |
+
+### Caching & Policies
+- Each edge location has its own cache  
+- **Cache Key** = hostname + URL path by default  
+- On request: checks cache → if missing, fetches from origin → caches it  
+- **Goal:** maximize cache hit ratio  
+
+**Cache Key Customization:**  
+- Can include headers, cookies, query strings  
+- Controlled via **Cache Policy** (none, whitelist, all, etc.)
+
+**Invalidation:** removes cached items before TTL expires  
+
+**Origin Request Policy:**  
+- Forwards extra headers/cookies/query strings to origin **without affecting cache key**  
+- Use when origin needs info not used in caching  
+
+**Key Difference:**  
+- Cache Policy = defines **cache key**  
+- Origin Request Policy = defines **what goes to origin**
+
+### Signed URL / Cookies
+- Secure, temporary access to **private content** via CloudFront  
+- **Signed URL** = access **one file**  
+- **Signed Cookie** = access **multiple files**  
+- Restrict access by **IP, path, time**  
+- Requires **CloudFront key pair**  
+
+**S3 Pre-signed URL:**  
+- Temporary direct access to S3 object using IAM permissions  
+- Bypasses CloudFront, **no caching**  
+- Use for **short-term direct S3 access**
+
+**When to Use:**  
+- CloudFront Signed URL → content behind CloudFront  
+- S3 Pre-signed URL → direct, short-term access  
+
+---
+
+## 16️⃣ ECS, ECR & Fargate – Docker in AWS
+
+### Docker / AWS Services
+- **Amazon ECR:** container image repository (like DockerHub)  
+- **Amazon ECS:** AWS container platform  
+- **Amazon EKS:** managed Kubernetes service  
+- **AWS Fargate:** serverless container platform (works with ECS/EKS)  
+
+### ECS Launch Types
+| Type | Who manages infra | Pros | Use Case |
+|------|-----------------|------|----------|
+| EC2 | You | Full control, optimize costs (Spot instances), background services | Need control, customize instances |
+| Fargate | AWS | No infra management, pay per CPU/memory | Simple deployments, small teams, serverless containers |
+
+### ECS Auto Scaling
+- Uses **Application Auto Scaling**  
+- Scale on CPU, Memory, ALB Request Count per target  
+- Scaling types: **Target Tracking** (preferred), Step Scaling, Scheduled  
+- Fargate: easier, serverless  
+- EC2: requires scaling EC2 instances via ASG or **ECS Capacity Provider**
+
+**Example Flow:** CPU ↑ → CloudWatch alarm triggers → desired task count ↑ → new task launches → if EC2, Capacity Provider adds instance  
+
+**Exam Tip:** prefer Fargate or Capacity Provider for EC2
+
+### Rolling Updates
+- Update gradually → no downtime  
+- Updates batch → wait for healthy → next batch  
+- Used in ECS, Kubernetes, deployment tools
+
+### ECS Task Definitions
+- Metadata (JSON/UI) for **running containers**  
+- Key fields: image, CPU, memory, ports, env vars, IAM task role, logging  
+- EC2: define container & host ports (host port 0 = dynamic, ALB maps it)  
+- Fargate: only container port needed, each task gets private IP  
+- Env vars: hardcoded or from **SSM/Secrets Manager**  
+- Up to 10 containers per task  
+- Volumes: EC2 = instance storage, Fargate = ephemeral (20–200 GB)  
+
+### ECS Task Placement (EC2 Only)
+- Decides **where to place tasks** in cluster  
+- Steps: check CPU/memory/ports → apply constraints → apply strategy  
+
+**Strategies:**  
+- binpack → pack tasks tightly (cost-saving)  
+- spread → distribute evenly (AZs/instances)  
+- random → random placement  
+
+**Constraints:**  
+- distinctInstance → one task per EC2  
+- memberOf → use cluster query (e.g., t2 instances)
+
+### Amazon EKS
+- Runs Kubernetes on AWS  
+- Launch Types: EC2 (you manage nodes) / Fargate (serverless)  
+- Pods = Kubernetes units (like ECS tasks)  
+- Node Types: Managed, Self-managed, Fargate  
+- Storage: EC2 → EBS, EFS, FSx; Fargate → EFS only  
+- Supports ALB/NLB for public/private access  
+
+### AWS Copilot
+- CLI tool to build, release, operate container apps  
+- Deploys to App Runner, ECS, Fargate  
+- Hides infra complexity  
+- Supports multi-environment deployment  
+- Integrates with CodePipeline, logging, health checks  
+- Auto-scales infra, focus on app code  
+
+### ECS Solution Architectures
+- Refer slides for architecture patterns
+
+---
+
+## 17️⃣ AWS Elastic Beanstalk
+
+### Deployment Modes
+| Mode | Description |
+|------|------------|
+| All at once | Fastest, downtime, good for dev |
+| Rolling | Update batches, runs below capacity, no extra cost |
+| Rolling with additional batch | Keep full capacity, small extra cost |
+| Immutable | Deploy new instances in temporary ASG, zero downtime, higher cost |
+| Blue/Green | New environment → test → swap URLs, zero downtime |
+| Traffic Splitting | Canary testing via ALB, automated rollback, zero downtime |
+
+### Lifecycle Policy
+- Max 1000 app versions per account  
+- Delete old versions by age/count  
+- Option to keep/delete S3 source bundles  
+- Managed by Beanstalk service role
+
+### Extensions (.ebextensions)
+- Directory: `.ebextensions/` at source root  
+- YAML/JSON `.config` files (e.g., logging.config)  
+- Modify environment, add AWS resources (RDS, DynamoDB, etc.)  
+- Resources deleted if environment deleted  
+
+### CloudFormation Integration
+- Beanstalk uses **CloudFormation stacks** internally  
+- Provisions ASG, ELB, Security Groups, scaling policies  
+- Extend via `.ebextensions`  
+
+### Cloning
+- Clone environment → exact copy (config + resources)  
+- RDS data **not cloned**  
+- Customize after cloning
+
+### Migrations
+- **Load Balancer:** cannot change ELB type on existing env → create new env → swap traffic  
+- **RDS:** snapshot, enable deletion protection → create new env without RDS → point app → shift traffic → terminate old env
+
