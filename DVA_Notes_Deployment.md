@@ -148,3 +148,11 @@ AWS CloudFormation provides Python scripts to help set up and manage EC2 instanc
 - Changes in local code/templates **won’t deploy** if `--guided` or config not updated.  
 - For large apps, ensure **artifact size < S3/Lambda limits**.
 
+
+## ⚡ Lambda Package Gotchas
+
+- **Big Lambda** → Upload code to **S3** if package is large.  
+- **Reusable/shared code** → Use **Layers** to keep function small and modular.  
+- Max zipped size: 50 MB (direct), 250 MB (S3); max unzipped + layers: 250 MB.  
+- A function can use **up to 5 layers**.
+
