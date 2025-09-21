@@ -43,4 +43,12 @@
 - `.ebextensions` is for **custom configs**, not container definitions.  
 - `eb config` → updates environment settings, does not define containers.  
 - ECS console → Not used when deploying through Elastic Beanstalk.  
-- Elastic Beanstalk automatically handles **load balancing, scaling, and monitoring**.  
+- Elastic Beanstalk automatically handles **load balancing, scaling, and monitoring**.
+
+## Elastic Beanstalk .ebextensions Use Case
+
+- **Purpose:** Automate environment configuration during deployment.  
+- **Example Use Case:**  
+  - Install additional software or packages on EC2 instances.  
+  - Create custom directories or config files.  
+  - Set environment variables or run commands at deployment.  
