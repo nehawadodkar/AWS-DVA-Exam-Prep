@@ -498,4 +498,218 @@
   Type: Custom::ResourceName
   ServiceToken: <Lambda ARN>
 
+  # AWS CloudFormation & Integration Notes
+
+---
+
+## 1️⃣1️⃣ StackSets
+- Deploy/update/delete stacks across multiple accounts and regions.  
+- Managed from an **administrator account** (often with AWS Organizations).  
+- Changes applied simultaneously to all stack instances.
+
+---
+
+## 1️⃣2️⃣ Intrinsic Functions
+- `!Ref` → reference parameter value or resource physical ID.  
+- `!GetAtt` → get resource attribute (e.g., AZ, PublicIp).  
+- `!FindInMap` → get value from mapping.  
+- `!ImportValue` → import exported value from another stack.  
+- `!Base64` → encode string in Base64 (e.g., UserData).  
+
+**Condition functions:** `!If`, `!Equals`, `!And`, `!Or`, `!Not`  
+**Others:** `!Join`, `!Sub`, `!Select`, `!Split`, `!Cidr`
+
+---
+
+## 1️⃣3️⃣ Rollbacks
+- Default: on failure, stack creation/update **rolls back**.  
+- Can disable rollback to preserve resources for troubleshooting.  
+- Update failures roll back to last known good state.  
+- On rollback failure, manually fix and call `ContinueUpdateRollback`.
+
+---
+
+## 1️⃣4️⃣ Capabilities
+- `CAPABILITY_IAM`: acknowledge templates creating IAM resources without names.  
+- `CAPABILITY_NAMED_IAM`: for IAM resources with explicit names.  
+- `CAPABILITY_AUTO_EXPAND`: for templates with macros/nested stacks.  
+- Must acknowledge in console or CLI (`--capabilities`), else `InsufficientCapabilitiesException`.
+
+---
+
+# ⚡ AWS Integration & Messaging: SQS, SNS & Kinesis
+
+### Amazon SQS - Standard Queues
+- Fully managed message queue to decouple apps and enable async processing.  
+- Unlimited throughput and message volume.  
+- **Delivery:** at-least-once (may have duplicates), best-effort ordering.  
+- **Max message size:** 256 KB.  
+- **Retention:** 1 min – 14 days (default 4 days).  
+- Low latency (<10 ms).  
+
+**Producers & Consumers**  
+- Producers send messages (`SendMessage`)  
+- Consumers poll/process/delete (`DeleteMessage`)  
+
+**Scaling:**  
+- Use multiple consumers; scale with EC2 Auto Scaling  
+- Trigger scaling on CloudWatch metric `ApproximateNumberOfMessages`  
+
+**Security:**  
+- In-flight: HTTPS  
+- At-rest: KMS encryption  
+- Access control via IAM and SQS policies  
+
+**Queue Access Policies**  
+- Resource-based JSON policies attached to SQS queues  
+- Allow cross-account access or AWS service access  
+
+**Message Visibility Timeout**  
+- Message becomes invisible to others for default 30s after receipt  
+- Use `ChangeMessageVisibility` to extend processing time  
+
+**Dead Letter Queues (DLQ)**  
+- Stores messages that fail processing after `MaximumReceives`  
+- DLQ type must match source queue type  
+- Set long retention (e.g., 14 days) and optionally redrive to source  
+
+**Delay Queues**  
+- Postpone message visibility for up to 15 min  
+- Set at queue level (default) or per message (`DelaySeconds`)  
+
+**Long Polling**  
+- Consumer waits (1–20s) if queue is empty  
+- Fewer API calls → lower cost, less CPU usage  
+- Queue level: `ReceiveMessageWaitTimeSeconds`  
+- Use case: chat apps → immediate message delivery  
+
+**SQS Extended Client**  
+- For large messages (>256 KB), store payload in S3; send pointer in SQS  
+
+**Key API Calls:** `CreateQueue`, `DeleteQueue`, `PurgeQueue`, `SendMessage`, `ReceiveMessage`, `DeleteMessage`, `ChangeMessageVisibility`  
+- Batch APIs available to reduce cost  
+
+**SQS FIFO Queues**  
+- Maintains message order per `MessageGroupId`  
+- Name must end with `.fifo`  
+- Throughput: 300 msg/s (no batch), 3000 msg/s (batch)  
+- Deduplication interval: 5 min (content-based or explicit ID)  
+- Use cases: transaction order, chat threads, per-customer order processing  
+
+---
+
+### Amazon SNS
+- **Pub/Sub:** Producer → SNS Topic → multiple subscribers  
+- **Subscribers:** Email, SMS, HTTP(S), Lambda, SQS, Kinesis Firehose  
+- **Limits:** ~12M+ subscribers/topic, 100K topics/account  
+- **Security:** TLS in-flight, KMS at-rest, IAM + SNS policies  
+- **Mobile push:** GCM, APNS, ADM  
+
+**Fan-Out Pattern**  
+- Producer sends 1 message → SNS topic → multiple SQS queues receive it  
+- Benefits: decoupled, reliable, scalable, supports retries/delayed processing  
+- Subscribers can filter messages using JSON policies  
+
+---
+
+### Amazon Kinesis Data Streams & Firehose
+**Firehose**  
+- Fully managed, near real-time streaming delivery  
+- Sources: Direct PUT, Kinesis Agent, CloudWatch Logs/Events, IoT Core, EventBridge  
+- Destinations: S3, Redshift, OpenSearch, Splunk, Datadog, custom HTTP  
+- Features: Lambda transform, convert/compress formats, automatic scaling, pay-per-use  
+
+**Key Configurations:**  
+- Buffer Size: 5 MB (default) → bigger = efficiency, smaller = faster  
+- Buffer Interval: 300s default (min 60s, max 900s)  
+- Compression: optional  
+- Encryption: optional  
+- IAM Role: auto-created  
+
+**Firehose vs Kinesis Data Streams**  
+
+| Feature       | Firehose                | Data Streams                 |
+|---------------|------------------------|-----------------------------|
+| Delivery      | Near real-time         | Real-time                   |
+| Scaling       | Auto                   | Provisioned/on-demand       |
+| Storage       | None                   | Up to 1 year                |
+| Replay        | No                     | Yes                         |
+| Coding        | No consumer code       | Write consumer/producer     |
+| Destinations  | AWS services, HTTP     | Custom consumers            |
+
+---
+
+# ⚡ AWS Monitoring & Audit: CloudWatch, X-Ray, CloudTrail
+
+### CloudWatch Metrics
+- Default metrics: automatically provided by AWS  
+- Custom metrics: `PutMetricData` API  
+- Dimensions: key/value (e.g., InstanceId, Env)  
+- Storage resolution: standard 60s, high-res 1s/5s/10s/30s  
+- CloudWatch Agent: pushes system metrics (RAM, disk, etc.)  
+- Namespace: logical container for metrics  
+
+### CloudWatch Logs
+- **Log Groups:** app/service level  
+- **Log Streams:** instance/container/file level  
+- **Retention:** 1 day–10 yrs or never  
+- **Encryption:** default or KMS CMK  
+- **Sources:** EC2, ECS, Lambda, Beanstalk, API GW, CloudTrail, Route53  
+- **Agents:** Logs Agent (logs only), Unified Agent (logs + metrics)  
+- **Querying:** Logs Insights, Live Tail  
+- **Export:** S3, Subscription Filters → Kinesis/Firehose/Lambda/OpenSearch  
+
+### Metric Filters & Alarms
+- Extract metrics from logs → trigger alarms  
+- Alarm states: OK, INSUFFICIENT_DATA, ALARM  
+- Actions: EC2 (stop, reboot), Auto Scaling, SNS, Lambda  
+- Composite alarms: combine multiple alarms with AND/OR  
+- High-res metrics supported  
+
+### CloudWatch Synthetics
+- Simulate user behavior (APIs, apps)  
+- Runs on schedule (1–5 min)  
+- Scripts: Node.js or Python  
+- Logs failures in CloudWatch, trigger SNS alarms  
+
+### CloudTrail vs CloudWatch vs X-Ray
+
+| Service     | Purpose                                 |
+|------------|----------------------------------------|
+| CloudTrail | Auditing → who did what (API calls)    |
+| CloudWatch | Monitoring → system/app performance    |
+| X-Ray      | Debugging & tracing → request flow     |
+
+**Integration workflow:**  
+1. CloudWatch detects problem  
+2. SNS notifies  
+3. EventBridge triggers actions  
+4. X-Ray shows root cause  
+5. CloudTrail shows who/what caused change  
+
+---
+
+# ⚡ AWS Serverless
+
+### Compute
+- **AWS Lambda** – Run code without managing servers  
+- **AWS Fargate** – Run Docker containers serverlessly  
+- **AWS Step Functions** – Orchestrate workflows without servers  
+
+### Databases
+- **Amazon DynamoDB** – Serverless NoSQL database  
+- **Aurora Serverless** – Relational database, scales automatically  
+
+### Storage
+- **Amazon S3** – Object storage, fully managed  
+
+### Messaging & Streaming
+- **Amazon SNS** – Pub/Sub notifications, auto-scaled  
+- **Amazon SQS** – Managed message queues, auto-scaled  
+- **Amazon Kinesis Data Firehose** – Real-time streaming, auto-scaled, pay-per-use  
+
+### Identity & Access
+- **Amazon Cognito** – Serverless user authentication & authorization
+
+
 
