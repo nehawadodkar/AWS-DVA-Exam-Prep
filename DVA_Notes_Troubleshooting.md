@@ -50,10 +50,7 @@
   - **SQL queries** (MySQL, PostgreSQL).  
 - Supported languages: Java, Node.js, Python, Go, .NET, Ruby.  
 
-### Example: Node.js
-```js
-const AWSXRay = require('aws-xray-sdk');
-const mysql = AWSXRay.captureMySQL(require('mysql'));
+
 
 
 
