@@ -149,5 +149,86 @@
 - **Visualize multiple metrics in one place** → CloudWatch Dashboard
 - **Trace request latency across services** → CloudWatch + X-Ray
 
+# AWS CloudTrail Cheat Sheet (DVA Exam)
+
+## Overview
+- **Purpose**: Continuous monitoring and auditing of AWS account activity.
+- **Tracks**: API calls and actions taken on AWS resources.
+- **Records**: Who did what, when, from where.
+- **Use cases**:
+  - Security analysis & auditing
+  - Compliance & governance
+  - Troubleshooting operational issues
+
+---
+
+## Key Concepts
+
+### Trails
+- A **trail** is a configuration that enables CloudTrail to deliver log files to S3.
+- Types:
+  - **Single-region trail** → logs only that region
+  - **Multi-region trail** → logs across all regions
+- Can **send logs to CloudWatch Logs** for monitoring & alarms.
+
+### Events
+1. **Management events**
+   - Operations on AWS resources (create, modify, delete)
+   - Examples: `CreateBucket`, `RunInstances`, `PutItem`
+2. **Data events**
+   - Resource-level API operations (read/write)
+   - Examples:
+     - S3 object-level: `GetObject`, `PutObject`
+     - Lambda function-level: `InvokeFunction`
+   - Data events **not enabled by default** (enable per bucket/function)
+
+### Event Format
+- JSON structure includes:
+  - `eventTime`
+  - `eventName`
+  - `userIdentity`
+  - `sourceIPAddress`
+  - `awsRegion`
+  - `requestParameters`
+  - `responseElements`
+
+---
+
+## CloudTrail Logging
+- Default: **Management events are logged automatically** in the region.
+- To persist logs: create a **trail** → send to **S3 bucket** (and optionally CloudWatch Logs).
+- Enable **log file encryption** using **SSE-KMS** for security.
+
+---
+
+## Integration
+- **CloudWatch Logs** → monitor & create alarms on specific API calls or suspicious activity.
+- **EventBridge** → trigger actions on specific API activity.
+- **AWS Config** → detect configuration changes and compliance violations.
+
+---
+
+## Security & Compliance
+- Immutable logs → cannot be deleted if S3 bucket has **versioning** & **MFA delete** enabled.
+- Tracks **all IAM users, roles, and AWS services** calling APIs.
+- Essential for audits, compliance frameworks (PCI, HIPAA, SOC2).
+
+---
+
+## Common Exam Scenarios
+| Scenario | CloudTrail Feature |
+|----------|------------------|
+| Track S3 bucket object access | Enable **data events** for S3 |
+| Detect EC2 instance changes | Management events |
+| Real-time alert for sensitive API calls | CloudTrail → CloudWatch Logs → Alarm |
+| Store logs for compliance | CloudTrail → S3 bucket (with encryption & versioning) |
+
+---
+
+## Notes
+- **CloudTrail ≠ CloudWatch Metrics**: CloudTrail logs API activity; CloudWatch monitors resource metrics & application logs.
+- Can integrate CloudTrail + CloudWatch + EventBridge for **full monitoring & alerting pipeline**.
+
+
 ---
 
