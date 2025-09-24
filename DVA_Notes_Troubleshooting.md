@@ -289,6 +289,11 @@
   - Integration (e.g., Lambda) doesn’t respond within allowed time.  
   - **API Gateway max timeout = 29 seconds**.  
   - Or backend is too slow/unavailable.
-  - - ⚡ **Note:** If your Lambda runs longer than 29s, API Gateway will **time out**, even though the Lambda keeps running in the background.  
+  - - ⚡ **Note:** If your Lambda runs longer than 29s, API Gateway will **time out**, even though the Lambda keeps running in the background.
+    - 
+
+# API Gateway – HTTP Status Codes
+- **429 Too Many Requests**
+- **504 Gateway Timeout**  
 
 
