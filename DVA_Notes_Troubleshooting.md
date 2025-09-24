@@ -278,5 +278,17 @@
 
 
 
----
+# API Gateway – Throttling vs Timeout
+
+## Throttling
+- API Gateway enforces throttling automatically if too many requests come in.  
+- When throttled → returns **429 Too Many Requests** (not 504).  
+
+## Timeout (504 Gateway Timeout)
+- Happens when:  
+  - Integration (e.g., Lambda) doesn’t respond within allowed time.  
+  - **API Gateway max timeout = 29 seconds**.  
+  - Or backend is too slow/unavailable.
+  - - ⚡ **Note:** If your Lambda runs longer than 29s, API Gateway will **time out**, even though the Lambda keeps running in the background.  
+
 
