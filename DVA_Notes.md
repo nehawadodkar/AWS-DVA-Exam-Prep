@@ -774,4 +774,34 @@ You can integrate an API Gateway method with a custom HTTP endpoint in **two mai
 
 **⚠️ Gotcha:** Cognito User Pools = just a **user directory** for authentication; it **does NOT sync user data** across devices.
 
+# EBS vs EFS vs S3 (AWS Storage)
+
+## 🖥️ EBS (Elastic Block Store)
+- Think of it as your **EC2’s personal USB drive**.
+- Block storage, tied to **one EC2** at a time.
+- Snapshots possible for backup/reuse.
+- Best for: databases, OS, transactional workloads.
+
+## 📂 EFS (Elastic File System)
+- Like a **shared Google Drive folder** for EC2s.
+- File storage, scales automatically.
+- Multiple EC2s can mount it simultaneously.
+- Best for: web apps, CMS, shared configs.
+
+## ☁️ S3 (Simple Storage Service)
+- Imagine an **endless Dropbox in the cloud**.
+- Object storage, not tied to EC2.
+- Globally available, virtually infinite.
+- Best for: backups, static websites, media, big data.
+
+---
+
+## Quick Trick to Remember
+- **EBS → 1 server’s disk**
+- **EFS → many servers’ disk**
+- **S3 → no server needed at all**
+
+
+
+
 
