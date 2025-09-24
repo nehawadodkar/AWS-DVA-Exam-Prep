@@ -25,25 +25,18 @@
 
 👉 Exam Tip: *Use **Annotations** for searchable fields, **Metadata** for extra details.*
 
-## How to Enable X-Ray
-1. **Elastic Beanstalk**  
-   - Add `.ebextensions/debugging.config`:  
-     ```yaml
-     option_settings:
-       aws:elasticbeanstalk:xray:
-         XRayEnabled: true
-     ```
-   - Starts the X-Ray daemon/agent.
+# X-Ray Enablement Quick Revision
 
-2. **Lambda**  
-   - Enable X-Ray in function config.  
-   - Automatically traces requests.  
+| Service              | How to Enable X-Ray                           | Notes                                |
+|-----------------------|-----------------------------------------------|--------------------------------------|
+| **Elastic Beanstalk** | `.ebextensions/debugging.config` → set `XRayEnabled: true` | Starts X-Ray daemon automatically    |
+| **Lambda**           | Enable in function config                     | Auto traces requests (no daemon req.)|
+| **EC2 / ECS / On-prem** | Install & run X-Ray daemon + instrument SDK  | Manual setup & instrumentation needed|
 
-3. **EC2 / ECS / On-prem**  
-   - Install & run X-Ray daemon.  
-   - Instrument code with SDK.  
 
 ## SDK Instrumentation
+- SDK Instrumentation means adding X-Ray SDK in code so app reports traces.  
+- Captures HTTP, AWS SDK, DB queries for deep visibility.  
 - Required to capture:
   - **HTTP calls** (internal/external).  
   - **AWS SDK calls**.  
