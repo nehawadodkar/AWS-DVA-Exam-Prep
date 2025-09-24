@@ -350,3 +350,13 @@
 💡 Memory: Split = redistribute load; Add = increase capacity; Merge = reduce cost.
 
 
+
+# ⚠️ GOTCHA: DynamoDB Streams
+
+**⏰ All DynamoDB Streams stream records last ONLY 24 HOURS!**  
+- You can retrieve **changes for the last 24 hours**, but anything older is **gone forever**.  
+- **Cannot extend retention** — no exceptions!  
+💡 Memory: *“If it’s older than 24h, it’s dust!”*
+
+
+
