@@ -242,6 +242,39 @@
 ---
 👉 Extra (avoid confusion):  
 - **GetServiceGraph** → Returns the **service map** (nodes & edges of services), *not* trace IDs.
+- 
+
+## 🔐 Security Services
+
+### 1. **AWS WAF (Web Application Firewall)**
+- Protects **HTTP/HTTPS traffic** for **CloudFront, ALB, API Gateway, AppSync**.
+- Blocks/filters based on rules (e.g., SQL injection, XSS, IP blocklist).
+- Works at **Layer 7 (Application Layer)**.
+
+### 2. **Network ACL (NACL)**
+- Stateless firewall at the **subnet level** (VPC).  
+- Rules applied in **number order**.  
+- Evaluates both **inbound and outbound** traffic.  
+- Use for **network-level control** (IP, port, protocol).  
+
+### 3. **AWS Firewall Manager**
+- **Centralized management** of firewall rules across multiple accounts/resources.  
+- Works with **AWS WAF, AWS Shield, and Security Groups**.  
+- Helps enforce **organization-wide security policies**.  
+
+### 4. **Amazon GuardDuty**
+- **Threat detection service** using ML and threat intel.  
+- Monitors **CloudTrail, VPC Flow Logs, DNS logs**.  
+- Detects anomalies (compromised IAM credentials, crypto mining, unusual API calls).  
+- **Does not block traffic** — only alerts.
+
+---
+
+## 🧠 Memory Hooks
+- **WAF → Web (Layer 7)**  
+- **NACL → Network (subnet, stateless)**  
+- **Firewall Manager → Policy manager (centralized control)**  
+- **GuardDuty → Guard/Detect (threat detection, alerts only)** 
 
 
 
