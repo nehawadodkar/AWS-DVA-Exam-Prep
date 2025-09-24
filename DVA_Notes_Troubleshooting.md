@@ -229,6 +229,21 @@
 - **CloudTrail ≠ CloudWatch Metrics**: CloudTrail logs API activity; CloudWatch monitors resource metrics & application logs.
 - Can integrate CloudTrail + CloudWatch + EventBridge for **full monitoring & alerting pipeline**.
 
+# AWS X-Ray APIs (DVA Exam Note)
+
+- **GetTraceSummaries** → Gets **trace IDs only** (lightweight, summary view).  
+- **BatchGetTraces** → Gets **full trace details** (complete trace data).  
+
+💡 **Memory Trick:**  
+*“Summaries first, Batch later.”*  
+- Use **Summaries** to collect trace IDs.  
+- Use **Batch** to fetch the full traces.
+
+---
+👉 Extra (avoid confusion):  
+- **GetServiceGraph** → Returns the **service map** (nodes & edges of services), *not* trace IDs.
+
+
 
 ---
 
