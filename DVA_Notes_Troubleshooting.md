@@ -327,3 +327,15 @@
 |                | BucketSizeBytes               | Total storage size                                            |
 |                | AllRequests / 4XX / 5XXErrors | Request count / errors                                        |
 
+
+
+
+## Kinesis – DVA Exam Key Points
+
+| Feature         | Data Streams                  | Firehose                               |
+|-----------------|-------------------------------|----------------------------------------|
+| **Purpose**     | Real-time streaming, custom processing | Capture & deliver streaming data automatically |
+| **Management**  | Must manage shards & consumers | Fully managed, no shards/consumers    |
+| **Processing**  | Custom (Lambda, apps)         | Optional transformation                |
+| **Delivery**    | Manual via consumers          | Automatic to S3, Redshift, OpenSearch, Splunk |
+
