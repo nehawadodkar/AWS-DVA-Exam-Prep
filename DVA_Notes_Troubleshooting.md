@@ -296,4 +296,34 @@
 - **429 Too Many Requests**
 - **504 Gateway Timeout**  
 
+# AWS CloudWatch Key Metrics – DVA Exam
+
+| Service        | Metric Name                   | Description / Usage                                           |
+|----------------|-------------------------------|---------------------------------------------------------------|
+| **Lambda**     | Invocations                   | Number of times the function was invoked                     |
+|                | Duration                      | Time taken per invocation (ms)                                |
+|                | Errors                        | Number of failed invocations                                  |
+|                | Throttles                     | Number of invocation requests that were throttled             |
+|                | IteratorAge                   | Age of the last record in a stream for stream-based invocations |
+|                | DLQErrors                     | Errors sent to dead-letter queue                               |
+| **API Gateway**| 4XXError                      | Client-side errors                                            |
+|                | 5XXError                      | Server-side errors                                            |
+|                | Count                         | Number of API requests                                        |
+|                | Latency                       | Time from request to response (ms)                            |
+| **ALB / ELB**  | RequestCount                  | Number of requests received                                   |
+|                | HTTPCode_ELB_4XX / 5XX        | 4XX and 5XX errors                                           |
+|                | TargetResponseTime            | Time for targets to respond (ms)                              |
+|                | HealthyHostCount / UnHealthyHostCount | Health status of targets                               |
+| **ECS / EC2**  | CPUUtilization                | CPU usage (%)                                                 |
+|                | MemoryUtilization             | Memory usage (%)                                              |
+|                | DiskReadOps / DiskWriteOps    | Disk read/write operations                                     |
+|                | NetworkIn / NetworkOut        | Network traffic                                               |
+| **RDS**        | CPUUtilization                | CPU usage (%)                                                 |
+|                | FreeableMemory                | Memory available                                              |
+|                | DatabaseConnections           | Number of connections                                        |
+|                | ReadIOPS / WriteIOPS          | Disk I/O operations                                           |
+|                | DiskQueueDepth                | Number of pending I/O requests                                 |
+| **S3**         | NumberOfObjects               | Number of objects in bucket                                    |
+|                | BucketSizeBytes               | Total storage size                                            |
+|                | AllRequests / 4XX / 5XXErrors | Request count / errors                                        |
 
