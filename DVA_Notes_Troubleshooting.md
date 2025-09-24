@@ -339,3 +339,14 @@
 | **Processing**  | Custom (Lambda, apps)         | Optional transformation                |
 | **Delivery**    | Manual via consumers          | Automatic to S3, Redshift, OpenSearch, Splunk |
 
+
+
+
+# Kinesis Shards – Split, Add & Merge
+
+- **Split Shard:** Divide an **existing shard** into 2 to handle high write load on that shard.  
+- **Add Shard:** Increase **total stream capacity** by adding a new shard (not splitting), often used when overall stream throughput is too low.  
+- **Merge Shard:** Combine **two adjacent shards** into 1 to reduce cost when traffic is low.  
+💡 Memory: Split = redistribute load; Add = increase capacity; Merge = reduce cost.
+
+
