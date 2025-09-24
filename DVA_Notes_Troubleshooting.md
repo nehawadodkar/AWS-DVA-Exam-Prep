@@ -371,4 +371,7 @@
 *“No agent = basic EC2 metrics; agent = logs & custom metrics in CloudWatch.”*
 
 
+# VPC Flow Logs – Quick Notes
 
+- **Purpose:** Capture information about **IP traffic going in and out of network interfaces** in a VPC, subnet, or ENI.
+- 
