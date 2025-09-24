@@ -367,6 +367,8 @@
 | **Cost**                 | Free (basic EC2 metrics)     | Additional charges         |
 | **Use Case**             | General trend monitoring     | Real-time / fine-grained alerts and scaling |
 
+# CloudWatch Logs Agent – Quick Memory Hook
+*“No agent = basic EC2 metrics; agent = logs & custom metrics in CloudWatch.”*
 
 
 
