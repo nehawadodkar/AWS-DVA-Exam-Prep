@@ -359,4 +359,14 @@
 💡 Memory: *“If it’s older than 24h, it’s dust!”*
 
 
+# CloudWatch – Standard vs Detailed Monitoring
+
+| Feature                  | Standard Monitoring           | Detailed Monitoring         |
+|--------------------------|------------------------------|----------------------------|
+| **Frequency**            | 5-minute intervals           | 1-minute intervals         |
+| **Cost**                 | Free (basic EC2 metrics)     | Additional charges         |
+| **Use Case**             | General trend monitoring     | Real-time / fine-grained alerts and scaling |
+
+
+
 
