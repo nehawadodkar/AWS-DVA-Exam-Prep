@@ -363,6 +363,17 @@
 # CloudWatch Logs Agent – Quick Memory Hook
 *“No agent = basic EC2 metrics; agent = logs & custom metrics in CloudWatch.”*
 
+### ⚠️ Gotcha: CloudWatch Monitoring
+
+Take note: **CloudWatch does NOT monitor memory, swap, or disk space utilization of your instances by default**.  
+If you need these metrics, you must **install the CloudWatch agent** on your EC2 instances.
+
+**By default, CloudWatch only monitors:**
+- CPU utilization
+- Network in/out
+- Disk read/write operations (I/O only, not disk space)
+- Status checks (system and instance)
+
 
 # VPC Flow Logs – Quick Notes
 
