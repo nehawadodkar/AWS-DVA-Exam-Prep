@@ -30,7 +30,7 @@
 | Service              | How to Enable X-Ray                           | Notes                                |
 |-----------------------|-----------------------------------------------|--------------------------------------|
 | **Elastic Beanstalk** | `.ebextensions/debugging.config` → set `XRayEnabled: true` | Starts X-Ray daemon automatically    |
-| **Lambda**           | Enable in function config                     | Auto traces requests (no daemon req.)|
+| **Lambda**           | Enable in function config                     | Auto traces requests **(no daemon req.)**|
 | **EC2 / ECS / On-prem** | Install & run X-Ray daemon + instrument SDK  | Manual setup & instrumentation needed|
 
 
