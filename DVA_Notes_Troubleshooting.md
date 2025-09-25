@@ -31,7 +31,7 @@
 |-----------------------|-----------------------------------------------|--------------------------------------|
 | **Elastic Beanstalk** | `.ebextensions/debugging.config` → set `XRayEnabled: true` | Starts X-Ray daemon automatically    |
 | **Lambda**           | Enable in function config                     | Auto traces requests **(no daemon req.)**|
-| **EC2 / ECS / On-prem** | Install & run X-Ray daemon + instrument SDK  | Manual setup & instrumentation needed Fargate (awsvpc) → no port mapping; EC2/bridge → UDP 2000 needed|
+| **EC2 / ECS / On-prem** | Install & run X-Ray daemon + instrument SDK. Use a **user data script** to install the X-Ray daemon.  | Manual setup & instrumentation needed Fargate (awsvpc) → no port mapping; EC2/bridge → UDP 2000 needed|
 
 
 ## SDK Instrumentation
