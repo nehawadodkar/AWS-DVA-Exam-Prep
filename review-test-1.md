@@ -90,6 +90,29 @@ Local code → Package → S3 → Deploy → Stack → Lambda
 
 
 
+# AWS Lambda X-Ray Environment Variables
+
+## 1️⃣ Communication with X-Ray (Mandatory)
+- `_X_AMZN_TRACE_ID`  
+  - Auto-injected by Lambda per invocation  
+  - Contains trace ID & parent segment info for SDK
+
+- `AWS_XRAY_CONTEXT_MISSING`  
+  - Defines behavior if trace context is missing  
+  - Values:  
+    - `LOG_ERROR` → log warning (debug-friendly)  
+    - `RUNTIME_ERROR` → throw error (strict mode)
+
+## 2️⃣ Optional / Informational
+- `AWS_XRAY_TRACING_NAME` → custom name for trace segments  
+- `AWS_XRAY_DEBUG_MODE` → not official, controlled via `AWS_XRAY_CONTEXT_MISSING`  
+- `AUTO_INSTRUMENT` → not an AWS Lambda variable
+
+## ✅ Memory Hook
+"_X_AMZN_TRACE_ID = trace info, AWS_XRAY_CONTEXT_MISSING = how to handle missing trace context._"
+
+
+
 
 
 
