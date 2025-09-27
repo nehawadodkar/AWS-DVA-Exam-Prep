@@ -161,7 +161,12 @@ Local code → Package → S3 → Deploy → Stack → Lambda
 
 ## Memory Hook
 - *Filter = which rows come back*  
-- *Projection = which columns come back*  
+- *Projection = which columns come back*
+
+- **Gotcha:** Route 53 geolocation routing ≠ content personalization.  
+  - It only directs **traffic to different resources** by region (performance/regulatory).  
+  - To serve **region-specific pages**, use **CloudFront-Viewer-Country** with edge or origin logic.
+
 
 
 
