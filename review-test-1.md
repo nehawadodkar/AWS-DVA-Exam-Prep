@@ -174,6 +174,17 @@ Local code → Package → S3 → Deploy → Stack → Lambda
 - **Long Polling:** Wait up to 20s for messages → fewer empty responses, cheaper.  
 - **Visibility Timeout:** Hide a message after read (default 30s, up to 12h) → must delete before timeout or it reappears.
 
+- # AWS Database Services – One-Liners
+
+- **RDS:** Managed relational DB service (MySQL, PostgreSQL, Oracle, SQL Server, MariaDB).  
+- **Aurora:** AWS-built relational DB, MySQL/Postgres-compatible, faster + highly scalable.  
+- **DynamoDB:** Fully managed NoSQL key-value/document DB, single-digit ms latency, serverless.  
+- **Redshift:** Managed data warehouse, optimized for OLAP & analytics on large datasets.  
+- **ElastiCache:** Managed in-memory cache for sub-ms latency + offloading DB reads.  
+  - **Redis:** Advanced features (pub/sub, backup/restore, clustering, persistence).  
+  - **Memcached:** Simple, multi-threaded, good for caching only (no persistence).  
+
+
 
 
 
