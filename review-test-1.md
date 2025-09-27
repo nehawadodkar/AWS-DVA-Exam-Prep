@@ -122,6 +122,13 @@ Local code → Package → S3 → Deploy → Stack → Lambda
 *“Web Env = serves users; Worker Env = works in background from SQS.”*
 
 
+# S3 Upload Optimization
+
+- **Multipart Upload:** large files, split & parallel upload  
+- **Transfer Acceleration:** long-distance uploads, uses CloudFront edges
+
+
+
 
 
 
