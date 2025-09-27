@@ -9,3 +9,11 @@
 - **STS = backdoor access** (bypasses the API)  
   - Giving clients direct DynamoDB access does **not** invalidate API Gateway cache.  
   - Bypasses API-level control, logging, throttling, and security.
+ 
+
+# **Lambda Invocation Types**
+
+- **Synchronous (RequestResponse)** ⏳: Caller waits, gets result immediately.  
+- **Asynchronous (Event)** 🚀: Caller doesn’t wait, Lambda retries on failure. ---ASYNC IS ALSO CALLED AS **EVENT ** 
+- **Destinations**: Handle success/failure of async invocations externally (SNS, SQS, Lambda).
+
