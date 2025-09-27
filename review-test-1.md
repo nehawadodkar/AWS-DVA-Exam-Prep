@@ -111,6 +111,17 @@ Local code → Package → S3 → Deploy → Stack → Lambda
 ## ✅ Memory Hook
 "_X_AMZN_TRACE_ID = trace info, AWS_XRAY_CONTEXT_MISSING = how to handle missing trace context._"
 
+# AWS Elastic Beanstalk Environment Types
+
+| Environment Type          | Purpose                         | Key Characteristics / Use Case |
+|---------------------------|---------------------------------|--------------------------------|
+| **Web Server Environment** | Handles HTTP/S requests from end-users | - Receives traffic via Load Balancer (optional)  <br> - Runs web apps (Node.js, Python, Java, etc.) <br> - Auto-scales with demand <br> - Returns responses to clients |
+| **Worker Environment**    | Handles background/asynchronous tasks | - Polls an **SQS queue** for tasks <br> - Processes tasks independently of web requests <br> - Ideal for email processing, media conversion, long-running jobs <br> - Auto-scalable separately |
+
+## Memory Hook
+*“Web Env = serves users; Worker Env = works in background from SQS.”*
+
+
 
 
 
