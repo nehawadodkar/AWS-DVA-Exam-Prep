@@ -84,5 +84,18 @@
 **“Evaluation periods = how many periods checked; datapoints to alarm = how many must breach → ensures only consistent issues trigger the alarm.”**
 
 
+# CloudFormation Lambda Deployment Flow
+
+```mermaid
+flowchart LR
+    A[Local Code<br>(app.js in tutorialsdojo/)] --> B[aws cloudformation package]
+    B --> C[S3 Bucket<br>(uploaded ZIP)]
+    C --> D[Modified Template<br>(CodeUri = S3 URI)]
+    D --> E[aws cloudformation deploy]
+    E --> F[CloudFormation Stack]
+    F --> G[AWS Lambda Function]
+
+
+
 
 
