@@ -182,7 +182,18 @@ Local code → Package → S3 → Deploy → Stack → Lambda
 - **Redshift:** Managed data warehouse, optimized for OLAP & analytics on large datasets.  
 - **ElastiCache:** Managed in-memory cache for sub-ms latency + offloading DB reads.  
   - **Redis:** Advanced features (pub/sub, backup/restore, clustering, persistence).  
-  - **Memcached:** Simple, multi-threaded, good for caching only (no persistence).  
+  - **Memcached:** Simple, multi-threaded, good for caching only (no persistence).
+ 
+
+## Key Points
+- **Lambda scales automatically** but only **up to your account concurrency limit** (default **1,000 concurrent executions per region**).  
+- If required concurrency > default limit → **request limit increase from AWS**.  
+- **Reserved concurrency** caps execution for a function; does **not increase account limit**.  
+- **Exponential backoff** is for retries, **not concurrency scaling**.
+
+## Memory Hook / Gotcha
+- *"Lambda scales automatically, but only up to your **concurrent execution limit** (default 1,000) — calculate req/sec × duration!"*
+
 
 
 
