@@ -147,6 +147,21 @@ Local code → Package → S3 → Deploy → Stack → Lambda
 *"EventBridge = central event router; direct triggers exist for Lambda, SQS, SNS, Step Functions; for S3/DynamoDB, put Lambda in the middle."*
 
 
+# DYNAMO DB Filter vs Projection Expressions
+
+## Filter Expression
+- Used to **filter rows/items** based on conditions.  
+- Example: `age > 25 AND status = 'active'`  
+- Works like a **WHERE clause** — reduces *records*.  
+
+## Projection Expression
+- Used to **choose which attributes/columns** to return.  
+- Example: `firstName, lastName, email`  
+- Works like a **SELECT column list** — reduces *fields*.  
+
+## Memory Hook
+- *Filter = which rows come back*  
+- *Projection = which columns come back*  
 
 
 
