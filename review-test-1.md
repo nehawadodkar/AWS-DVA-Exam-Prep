@@ -62,4 +62,27 @@
 **Memory Hook:** Memcached = simple, multithreaded, scalable; Redis = rich features but single-threaded.
 
 
+# CloudWatch Alarm Key Concepts
+
+## 1️⃣ Evaluation Period
+- **Definition:** Number of consecutive periods CloudWatch uses to evaluate a metric.  
+- **Period:** Granularity of each metric data point (e.g., 1 min).  
+- **Use Case:** Track HTTP 5xx errors every minute → set period = 1 min, evaluation periods = 3.  
+
+## 2️⃣ Datapoints to Alarm
+- **Definition:** Number of data points in the evaluation periods that must **breach the threshold** to trigger the alarm.  
+- **Use Case:** Avoid false alarms for intermittent HTTP errors → set datapoints to alarm = 3/3 (all 3 consecutive minutes must exceed threshold).  
+
+## 3️⃣ Example Scenario
+- **Metric:** HTTP 5xx errors (custom metric)  
+- **Period:** 1 minute  
+- **Evaluation Periods:** 3  
+- **Datapoints to Alarm:** 3  
+- **Behavior:** Alarm triggers **only if errors exceed threshold for all 3 consecutive minutes** → prevents false alarms during intermittent spikes.
+
+**Memory Hook:**  
+**“Evaluation periods = how many periods checked; datapoints to alarm = how many must breach → ensures only consistent issues trigger the alarm.”**
+
+
+
 
