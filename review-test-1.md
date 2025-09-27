@@ -83,29 +83,10 @@
 **Memory Hook:**  
 **“Evaluation periods = how many periods checked; datapoints to alarm = how many must breach → ensures only consistent issues trigger the alarm.”**
 
-# CloudFormation Lambda Deployment Flow
 
-Local code (app.js in tutorialsdojo/)
-        │
-        ▼
-Run: aws cloudformation package
-        │
-        ▼
-   Zipped & uploaded
-   to S3 bucket
-        │
-        ▼
- Template updated with
-   CodeUri = S3 URI
-        │
-        ▼
-Run: aws cloudformation deploy
-        │
-        ▼
- CloudFormation stack
-        │
-        ▼
- AWS Lambda function
+# CloudFormation Lambda Deployment Flow --- Lambda Deployment (Quick Rev)
+
+Local code → Package → S3 → Deploy → Stack → Lambda
 
 
 
