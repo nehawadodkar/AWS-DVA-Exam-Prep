@@ -167,6 +167,13 @@ Local code → Package → S3 → Deploy → Stack → Lambda
   - It only directs **traffic to different resources** by region (performance/regulatory).  
   - To serve **region-specific pages**, use **CloudFront-Viewer-Country** with edge or origin logic.
 
+# SQS Queue concepts
+
+- **Delay Queue:** Postpone message delivery (up to 15 min) for all new messages.  
+- **Short Polling:** Immediate response, may return empty (default).  
+- **Long Polling:** Wait up to 20s for messages → fewer empty responses, cheaper.  
+- **Visibility Timeout:** Hide a message after read (default 30s, up to 12h) → must delete before timeout or it reappears.
+
 
 
 
