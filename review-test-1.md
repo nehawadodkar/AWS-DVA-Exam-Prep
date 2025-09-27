@@ -44,3 +44,22 @@
 **“Viewer HTTPS → CloudFront policy; CloudFront→ALB HTTPS → ACM or CA cert; no self-signed, no defaults.”**
 
 
+# Amazon ElastiCache
+
+**Definition:** Amazon ElastiCache is a **fully managed in-memory caching service** that improves application performance by allowing you to retrieve information from fast, managed, in-memory data stores instead of relying entirely on slower disk-based databases.
+
+---
+
+# ElastiCache: Memcached vs Redis
+
+| Feature                  | Memcached ✅                     | Redis ❌                          |
+|---------------------------|---------------------------------|----------------------------------|
+| Threading / CPU usage     | Multithreaded, uses multiple cores | Mostly single-threaded           |
+| Scaling                   | Easy to scale out/in             | Requires sharding/replication    |
+| Use case                  | Simple key/value cache           | Advanced features, persistence   |
+| Key gotcha                | Best for multithreaded large nodes | Not ideal for multithreaded nodes|
+
+**Memory Hook:** Memcached = simple, multithreaded, scalable; Redis = rich features but single-threaded.
+
+
+
