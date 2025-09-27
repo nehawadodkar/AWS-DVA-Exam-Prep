@@ -127,6 +127,26 @@ Local code → Package → S3 → Deploy → Stack → Lambda
 - **Multipart Upload:** large files, split & parallel upload  
 - **Transfer Acceleration:** long-distance uploads, uses CloudFront edges
 
+# AWS EventBridge – Quick Reference
+
+## Supported Targets
+- **Lambda** ✅
+- **Step Functions** ✅
+- **SQS** ✅
+- **SNS** ✅
+- **Kinesis** ✅ (via Lambda if needed)
+- **EC2 / Auto Scaling events** ✅
+- **CloudWatch Alarms / Logs** ✅
+
+## Not Directly Supported (Gotchas)
+- **S3 object events** ❌ → use **S3 Event Notifications → Lambda/SQS/SNS**
+- **DynamoDB Streams** ❌ → use **Streams → Lambda → EventBridge**
+- **RDS events** ❌ → use **CloudWatch Alarms / Lambda**  
+
+**Memory Hook:**  
+*"EventBridge = central event router; direct triggers exist for Lambda, SQS, SNS, Step Functions; for S3/DynamoDB, put Lambda in the middle."*
+
+
 
 
 
