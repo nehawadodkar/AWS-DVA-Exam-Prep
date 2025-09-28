@@ -47,9 +47,6 @@
 
   # 🔢 Formula for AWS Lambda Concurrent Executions
 
-## Plain Formula
-
-## LaTeX-style Formula
 $$
 \text{Concurrent Executions} = \text{Invocations per Second} \times \text{Average Duration (s)}
 $$
