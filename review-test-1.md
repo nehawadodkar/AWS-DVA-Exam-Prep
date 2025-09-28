@@ -218,7 +218,9 @@ Local code → Package → S3 → Deploy → Stack → Lambda
 - Use **canary deployments** in a stage to gradually shift traffic to a new version.  
 
 💡 **Gotcha:**  
-- *Stage = environment with its own configs; deployment must be explicitly pushed to a stage.*  
+- *Stage = environment with its own configs; deployment must be explicitly pushed to a stage.*
+- 
+# LAMBDA concurrency limit is 1000 per region
 
 
 
