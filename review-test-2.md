@@ -1,3 +1,5 @@
+
+
 # CloudFront – Origin Access Control (OAC)
 
 - **OAC:** A secure way for CloudFront to access your S3 bucket or custom origin.  
@@ -43,5 +45,13 @@
 | **ThrottlingException** | Generic AWS “too many requests” error. Common in DynamoDB **On-Demand mode** or via higher-level APIs (DAX, Streams, SDK retries). | **On-Demand** capacity mode (or SDK-level) | Retry with exponential backoff, reduce request rate. Cannot be fixed by increasing provisioned capacity. |
 
 
-  
+  # 🔢 Formula for AWS Lambda Concurrent Executions
+
+## Plain Formula
+
+## LaTeX-style Formula
+$$
+\text{Concurrent Executions} = \text{Invocations per Second} \times \text{Average Duration (s)}
+$$
+
 
