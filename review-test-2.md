@@ -34,5 +34,14 @@
 | **SSE-KMS** | AWS KMS | `x-amz-server-side-encryption: aws:kms` <br> `x-amz-server-side-encryption-aws-kms-key-id: <KMS-Key-ID-or-ARN>` *(optional)* <br> `x-amz-server-side-encryption-context: <Base64-JSON>` *(optional)* | None | Supports audit logging & fine-grained IAM control. |
 | **SSE-C** | Customer | `x-amz-server-side-encryption-customer-algorithm: AES256` <br> `x-amz-server-side-encryption-customer-key: <Base64-256-bit-key>` <br> `x-amz-server-side-encryption-customer-key-MD5: <Base64-MD5-of-key>` | Same 3 headers required | AWS never stores the key. You must supply it for every request. Losing the key = permanent data loss. |
 
+
+# ⚡ DynamoDB Throttling Exceptions
+
+| Exception | When It Happens | Capacity Mode | Resolution |
+|-----------|-----------------|---------------|------------|
+| **ProvisionedThroughputExceededException** | You exceeded the table’s or index’s **provisioned RCU/WCU limits**. | **Provisioned** capacity mode | Increase provisioned capacity, enable Auto Scaling, or use retries with exponential backoff. |
+| **ThrottlingException** | Generic AWS “too many requests” error. Common in DynamoDB **On-Demand mode** or via higher-level APIs (DAX, Streams, SDK retries). | **On-Demand** capacity mode (or SDK-level) | Retry with exponential backoff, reduce request rate. Cannot be fixed by increasing provisioned capacity. |
+
+
   
 
