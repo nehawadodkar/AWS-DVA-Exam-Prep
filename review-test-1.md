@@ -194,6 +194,33 @@ Local code → Package → S3 → Deploy → Stack → Lambda
 ## Memory Hook / Gotcha
 - *"Lambda scales automatically, but only up to your **concurrent execution limit** (default 1,000) — calculate req/sec × duration!"*
 
+- 
+- # API Gateway – Integration Types
+
+| Type                        | Description |
+|------------------------------|-------------|
+| **Lambda Proxy (Recommended)** | API request sent **as-is** to Lambda; Lambda handles **entire request/response**; simpler mapping & flexible. |
+| **Lambda Custom (Non-Proxy)** | API Gateway **maps request/response** explicitly; more control but extra config needed. |
+| **HTTP/HTTP Proxy**          | API Gateway **forwards requests** to HTTP endpoints; HTTP Proxy passes request as-is; HTTP non-proxy allows mapping. |
+| **AWS Service**              | Direct integration with **other AWS services** (e.g., S3, SNS, DynamoDB) without Lambda. |
+| **Mock Integration**         | Returns **static responses**; useful for testing or API prototyping. |
+
+💡 **Gotcha:**  
+- *“Lambda Proxy = simplest & flexible. Use AWS Service integration to skip Lambda.”*
+
+# API Gateway – Stages
+
+- **Stage = Deployment environment** (e.g., `dev`, `test`, `prod`).  
+- Each stage has a **unique URL** endpoint.  
+- Can configure **stage variables** (like env vars) → influence integration settings.  
+- Supports **throttling & quota limits** per stage.  
+- **Logging & metrics** (CloudWatch) enabled per stage.  
+- Use **canary deployments** in a stage to gradually shift traffic to a new version.  
+
+💡 **Gotcha:**  
+- *Stage = environment with its own configs; deployment must be explicitly pushed to a stage.*  
+
+
 
 
 
