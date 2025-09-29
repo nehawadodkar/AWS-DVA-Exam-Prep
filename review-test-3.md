@@ -91,5 +91,25 @@ Use **DAX** only after switching to Query/Key-based reads and if you need furthe
 - **Amplify** → For **front-end & serverless full-stack apps** (React, Vue, mobile + APIs).  
 - **Elastic Beanstalk** → For **traditional backend apps** (Java, .NET, Node.js, Python) on EC2 with autoscaling.
 
+- ### S3 Replication – CRR vs SRR
+
+- **CRR (Cross-Region Replication)**  
+  → Replicates objects to a **different AWS Region**.  
+  → Use cases: **DR, compliance, latency for global users**.  
+
+- **SRR (Same-Region Replication)**  
+  → Replicates objects to another bucket in the **same Region**.  
+  → Use cases: **staging vs prod separation, log aggregation, backup**.  
+
+**Common Rules (both):**  
+- Need **Versioning ON** (source & destination).  
+- Replication is **asynchronous**.  
+- Replicates **new objects only** (unless backfill configured).  
+
+💡 **Memory Trick:**  
+- **CRR = Copy Remote Region**  
+- **SRR = Same Region Replica**
+
+
 
 
