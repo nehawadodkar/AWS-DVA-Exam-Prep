@@ -135,4 +135,8 @@ Use **DAX** only after switching to Query/Key-based reads and if you need furthe
 - **Change Set = preview changes**  
 - **Stack Instance = stack reference in a target account**
 
+- **CloudFront Functions:** Ultra-fast, lightweight JavaScript at the edge for URL rewrites, headers, and simple auth.  
+- **Lambda@Edge:** Full-featured edge logic, can call AWS services, used for complex JWT validation or logging.  
+- **AWS WAF:** Rule-based security at the edge for IP blocking, rate limiting, and common attacks.
+
 
