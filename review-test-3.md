@@ -56,6 +56,16 @@ Use **DAX** only after switching to Query/Key-based reads and if you need furthe
 
 ### S3 SSE-KMS Upload – Quick Flow
 
+
+### CloudWatch EC2 Metrics – Memory Trick
+
+- **Fact:** CloudWatch **does NOT monitor memory, swap, or disk space** by default.  
+- **Solution:** Install the **CloudWatch Agent** on your EC2 instances to track these metrics.  
+
+**Memory Trick:**  
+- Think: **“CloudWatch sees CPU & network, but not what’s in the closet (memory, swap, disk)”** → install the agent to peek inside the closet.
+
+
 - **Small file (<5 MB)** → single PUT → S3 generates data key, encrypts file → **no kms:Decrypt needed**.  
 - **Large file (≥5 MB)** → multipart upload → each part gets a data key → S3 encrypts each part → **kms:Decrypt + kms:GenerateDataKey* needed** to finalize multipart upload.  
 - S3 handles all encryption internally; uploader just needs correct KMS & S3 permissions.
