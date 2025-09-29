@@ -120,5 +120,19 @@ Use **DAX** only after switching to Query/Key-based reads and if you need furthe
 - **Standard = Fast, Can occur, at-least-once delivery, order not guaranteed**  
 - **FIFO = Ordered, Exactly-once processing, deduplicated, limited throughput**
 
+# CloudFormation – DVA Exam Quick Notes
+
+- **Stack:** Single collection of AWS resources deployed together.
+- **Template:** JSON/YAML file defining resources, parameters, mappings, conditions, and outputs.
+- **Parameters / Mappings / Conditions / Outputs:** Make templates reusable & dynamic.
+- **Change Set:** Preview proposed changes to a stack **before updating**.
+- **StackSet:** Create/update/delete stacks across **multiple accounts & regions**.
+- **Stack Instance:** Reference to a stack in a target account (part of StackSet).
+
+💡 **Memory Tip:**  
+- **Stack = single stack**  
+- **StackSet = multi-account & multi-region stack**  
+- **Change Set = preview changes**  
+- **Stack Instance = stack reference in a target account**
 
 
