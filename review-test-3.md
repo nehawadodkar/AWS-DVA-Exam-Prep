@@ -116,4 +116,9 @@ Use **DAX** only after switching to Query/Key-based reads and if you need furthe
 - **AWS X-Ray (X-Ray)** = AWS-only tracing  
 - **AWS Distro for OpenTelemetry (ADOT)** = Multi-backend, open-standard tracing
 
+💡 **Super-short Memory Trick:**  
+- **Standard = Fast, Can occur, at-least-once delivery, order not guaranteed**  
+- **FIFO = Ordered, Exactly-once processing, deduplicated, limited throughput**
+
+
 
