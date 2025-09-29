@@ -44,3 +44,13 @@ Which steps should be done to improve performance with **minimal cost**? (Select
 If the question mentions **Scan + minimal cost** → the best picks are:  
 **Query operations + reduce page size.**  
 Use **DAX** only after switching to Query/Key-based reads and if you need further acceleration.
+
+
+### Improving DynamoDB App Performance – Minimal Code Change
+
+**Scenario:** Single-item reads/writes causing network overhead.
+
+**Easiest & Cost-Effective Solution:**
+- Use **BatchGetItem** and **BatchWriteItem** to process multiple items per network call.
+- Reduces round-trips, improves throughput, minimal code changes.
+
