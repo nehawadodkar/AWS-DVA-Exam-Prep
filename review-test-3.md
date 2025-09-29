@@ -111,5 +111,9 @@ Use **DAX** only after switching to Query/Key-based reads and if you need furthe
 - **SRR = Same Region Replica**
 
 
+💡 **Memory Tip:**
+
+- **AWS X-Ray (X-Ray)** = AWS-only tracing  
+- **AWS Distro for OpenTelemetry (ADOT)** = Multi-backend, open-standard tracing
 
 
