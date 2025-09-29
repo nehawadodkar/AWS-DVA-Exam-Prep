@@ -65,6 +65,22 @@ Use **DAX** only after switching to Query/Key-based reads and if you need furthe
 **Memory Trick:**  
 - Think: **“CloudWatch sees CPU & network, but not what’s in the closet (memory, swap, disk)”** → install the agent to peek inside the closet.
 
+### SQS Key Concepts – Quick Comparison
+
+| Concept | One-Liner | Use Case / Notes |
+|---------|------------|-----------------|
+| **Delay Queue** | Delays delivery of new messages for a specified time. | Use when you want to postpone processing (e.g., order confirmation delay). |
+| **Short Polling** | Immediately returns messages available (may return empty). | Simple, low-latency checks but may miss messages; cheaper for low traffic. |
+| **Long Polling** | Waits up to 20s for messages if none are immediately available. | Reduces empty responses, saves cost, improves efficiency; good for steady workloads. |
+| **Visibility Timeout** | Hides a message after a consumer picks it, preventing duplicate processing. | Ensure messages aren’t processed multiple times; adjust based on processing time. |
+
+### Memory Trick:
+- **Delay queue → “pause before showing”**  
+- **Short poll → “peek quickly”**  
+- **Long poll → “wait patiently for message”**  
+- **Visibility timeout → “lock message while working”**
+
+
 
 - **Small file (<5 MB)** → single PUT → S3 generates data key, encrypts file → **no kms:Decrypt needed**.  
 - **Large file (≥5 MB)** → multipart upload → each part gets a data key → S3 encrypts each part → **kms:Decrypt + kms:GenerateDataKey* needed** to finalize multipart upload.  
