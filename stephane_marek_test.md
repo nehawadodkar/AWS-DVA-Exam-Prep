@@ -9,7 +9,7 @@ You can enable aip caching in api gateway - no coding reqd. can do this for simp
 
 
 - **IAM Access Analyzer** → Finds **unused access** to enforce **least privilege**.  
-- **Trusted Advisor** → Gives **best-practice guidance** on cost, security, and performance.  
+- **Trusted Advisor** → Gives **best-practice guidance** on cost, security, and performance - used for giving advice for provisioning
 - **Amazon Inspector** → **Automated vulnerability scanner** for workloads.  
 - **Security Hub** → **Central dashboard** for security findings and compliance.
 
