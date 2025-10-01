@@ -1,0 +1,58 @@
+All APIs created with API Gateway expose HTTPS endpoints only.
+
+
+RCU calculation
+
+Formula:
+Strongly consistent: RCU = ceil(ItemSizeKB / 4) * ReadPerSecond
+Eventually consistent: RCU = Strongly consistent * 0.5
+
+Gotcha: GSIs in DynamoDB always use eventual consistency — strongly consistent reads are not supported.
+Kinesis data streams - Consumer applications can read multiple times; retention configurable (default 24h, up to 7 days).
+
+
+Stage Variables (API Gateway)
+
+Live in API Gateway, per stage (dev, test, prod).
+
+Used to customize backend integrations without changing code.
+
+Passed to Lambda via mapping templates.
+
+lambda - Concurrency 0	Reserved concurrency set to 0 disables a function
+
+⚠️ Gotcha – Hot Partitions in DynamoDB:
+Even if your CloudWatch metrics show consumed capacity below provisioned limits, you can still get throttling errors due to a hot partition.
+
+✅ Fix it by:
+
+Distributing reads/writes evenly across partition keys
+Using exponential backoff on retries
+💡 When to use DAX:
+
+For read-heavy workloads where repeated reads on the same data cause latency issues
+DAX caches queries in memory, giving microsecond latency
+❌ Note: DAX does not fix hot partitions for writes and adds cost.
+
+
+Merging shards reduces parallelism; splitting shards increases it.
+
+Lambda does not automatically throttle due to too many shards, but account concurrency limits still apply.
+
+Example: 100 shards → at most 100 concurrent Lambda executions, regardless of record volume.
+
+
+⚡ Gotcha: Route 53 vs CloudFront (Geo Confusion!)
+🌍 Route 53 Geolocation = "Which door to enter?"
+
+DNS level → decides which endpoint/server (e.g., US users → US ALB, EU users → EU ALB).
+Think: traffic routing before entering the building.
+📦 CloudFront + Viewer-Country = "What do you get inside?"
+
+Edge function → inspects user’s country, does redirects (e.g., /us/, /uk/).
+Think: same building, but different rooms inside.
+💡 Memory Trick:
+👉 Route 53 = Where to go
+👉 CloudFront = What to show
+
+⚠️ Common exam trap: If the scenario is about redirects or personalized content → CloudFront Functions, NOT Route 53.
