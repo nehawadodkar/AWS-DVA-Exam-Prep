@@ -162,3 +162,74 @@ What it syncs	Key-value pairs (like settings, game scores)	Any app data from Dyn
 Scope	Per-user data	App-wide data/API layer
 Backend	Uses Cognito Identity + datasets	Managed GraphQL service
 Status	Legacy / deprecated → replaced by AppSync	Actively supported, modern choice
+
+X-Ray Enablement Quick Revision
+Service	How to Enable X-Ray	Notes
+Elastic Beanstalk	.ebextensions/debugging.config → set XRayEnabled: true	Starts X-Ray daemon automatically
+Lambda	Enable in function config	Auto traces requests (no daemon req.)
+EC2 / ECS / On-prem	Install & run X-Ray daemon + instrument SDK. Use a user data script to install the X-Ray daemon.	Manual setup & instrumentation needed Fargate (awsvpc) → no port mapping; EC2/bridge → UDP
+2000
+
+
+
+⏰ All DynamoDB Streams stream records last ONLY 24 HOURS!
+
+You can retrieve changes for the last 24 hours, but anything older is gone forever.
+Cannot extend retention — no exceptions!
+💡 Memory: “If it’s older than 24h, it’s dust!”
+
+
+Cloudwatch on EC2- “No agent = basic EC2 metrics; agent = logs & custom metrics in CloudWatch.”
+
+
+⚠️ Gotcha: CloudWatch Monitoring
+Take note: CloudWatch does NOT monitor memory, swap, or disk space utilization of your instances by default.
+If you need these metrics, you must install the CloudWatch agent on your EC2 instances.
+
+By default, CloudWatch only monitors:
+
+CPU utilization
+Network in/out
+Disk read/write operations (I/O only, not disk space)
+Status checks (system and instance)
+VPC Flow Logs – Quick Notes
+Purpose: Capture information about IP traffic going in and out of network interfaces in a VPC, subnet, or ENI.
+
+
+Asynchronous (Event) 🚀: Caller doesn’t wait, Lambda retries on failure. ---ASYNC IS ALSO CALLED AS **EVENT **
+
+ Simple Rules
+Want HTTPS for your users? → Focus on CloudFront Viewer Protocol Policy.
+Want HTTPS between CloudFront and ALB? → ALB needs a trusted certificate.
+Never use self-signed certs in production (browsers won’t trust it).
+ALB does not come with a default cert — you must attach one manually.
+S3 / storing certs → irrelevant for ALB or CloudFront HTTPS directly.
+
+ Memory Hook
+“Viewer HTTPS → CloudFront policy; CloudFront→ALB HTTPS → ACM or CA cert; no self-signed, no defaults.”
+
+ElastiCache: Memcached vs Redis
+Feature	Memcached ✅	Redis ❌
+Threading / CPU usage	Multithreaded, uses multiple cores	Mostly single-threaded
+Scaling	Easy to scale out/in	Requires sharding/replication
+Use case	Simple key/value cache	Advanced features, persistence
+Key gotcha	Best for multithreaded large nodes	Not ideal for multithreaded nodes
+Memory Hook: Memcached = simple, multithreaded, scalable; Redis = rich features but single-threaded.
+
+
+"X_AMZN_TRACE_ID = trace info, AWS_XRAY_CONTEXT_MISSING = how to handle missing trace context."
+
+Gotcha: Route 53 geolocation routing ≠ content personalization.
+
+It only directs traffic to different resources by region (performance/regulatory).
+To serve region-specific pages, use CloudFront-Viewer-Country with edge or origin logic.
+
+xray -- Gotcha:
+
+Use subsegments for internal work.
+
+Use remote subsegments + namespace when calling AWS services or external APIs.
+
+
+
+
