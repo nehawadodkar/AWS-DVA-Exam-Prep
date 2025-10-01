@@ -800,6 +800,10 @@ You can integrate an API Gateway method with a custom HTTP endpoint in **two mai
 - **EBS → 1 server’s disk**
 - **EFS → many servers’ disk**
 - **S3 → no server needed at all**
+- 
+
+💡 Feature Flags: Use **AWS AppConfig** to safely turn features on/off without redeploying your app. Custom Lambda or DynamoDB methods are overkill.
+
 
 
 
