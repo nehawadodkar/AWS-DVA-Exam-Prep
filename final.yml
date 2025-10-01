@@ -56,3 +56,109 @@ Think: same building, but different rooms inside.
 👉 CloudFront = What to show
 
 ⚠️ Common exam trap: If the scenario is about redirects or personalized content → CloudFront Functions, NOT Route 53.
+
+⚡ Exam Tips
+Lambda / Serverless: Blue/Green or Canary preferred for production.
+EC2 / ECS: Rolling or Immutable recommended for zero-downtime.
+SAM: Typically uses in-place or canary via CodeDeploy.
+Always know risk vs downtime trade-off for each strategy.
+
+
+Memory & CPU: Memory (128 MB – 10,240 MB); CPU scales with memory
+
+
+lambda Deployment Package
+Type	Max Size	Notes
+Zip file (direct upload)	50 MB	Includes your code + dependencies
+Zip file (via S3)	250 MB	Upload larger code via S3
+Container image	10 GB	Supports heavy dependencies, custom runtimes
+Handler file must be at root of zip (unless using subdirectories + proper path)
+Layers: Shared libraries or code; max 5 layers, total 250 MB
+
+
+lambda Timeout: 1 sec – 15 min (900 sec max)
+
+lambda Event Sources
+Synchronous: API Gateway, SDK calls, CloudWatch Logs → caller waits
+Asynchronous: S3, SNS, EventBridge → Lambda invoked in background
+Polling: SQS, DynamoDB Streams → Lambda polls events
+
+
+Lambda Authorizer (API Gateway):
+Types: Token (header/query) or Request (any request data)
+
+Cloud formation **StackSet = one template, many accounts/regions at once**  
+
+
+# Amazon S3  
+- Stores deploy artifacts (Lambda zips, CFN templates)  
+- CodePipeline artifact store, supports versioning  
+✅ Gotcha: SAM/CFN need S3 upload  
+💡 Hook: "S3 = Deploy bucket"  
+
+
+# AWS Amplify  
+Full-stack web/mobile deploy; Git branch = env.  
+✅ Gotcha: Branch mapping is exam-tested.  
+
+# AWS Copilot  
+CLI for ECS deploy; makes envs, services, pipelines.  
+✅ Gotcha: ECS-only (not EKS).  
+
+
+Elastic BeanStalk- Gotcha: For multi-container Docker, Dockerrun.aws.json must be at root, not inside .ebextensions.
+
+
+Elastic Beanstalk .ebextensions Use Case
+Purpose: Automate environment configuration during deployment.
+Example Use Case:
+Install additional software or packages on EC2 instances.
+Create custom directories or config files.
+Set environment variables or run commands at deployment.
+
+
+5️⃣ Execution Context
+The sandbox environment for Lambda code.
+Includes: runtime, /tmp storage (512 MB), env vars.
+Warm start: context reused → faster execution.
+Cold start: new context created → slower first run.
+✅ Gotcha: /tmp persists only for warm starts, not cold.
+
+
+Gotcha: Always use IAM roles + trust policies, not IAM users/keys, for cross-account setups.
+
+Automatic Key Rotation:
+AWS managed keys → rotated every 3 years.
+Customer managed keys → optional yearly rotation.
+
+ Hotlinking Prevention
+Hotlinking: Other sites link to your S3 files → you pay bandwidth.
+Fix: Use CloudFront + Signed URLs/Cookies.
+Gotcha:
+S3 Pre-signed URL → object-level temp access.
+CloudFront Signed URL/Cookie → best for hotlinking.
+
+
+Cross-account access: trust policy must allow external account’s IAM principal.
+
+Cross-account access (AWS → AWS): Use IAM Roles + Trust Policies.
+
+External access (on-prem / local machine / external apps): Use long-term AWS access keys (stored in ~/.aws/credentials or env vars).
+
+⚡ Gotcha: For on-prem/external, if possible use federation + AssumeRoleWithSAML/WebIdentity instead of static keys (best practice, avoids hardcoding).
+
+Q: When should you use Lambda Authorizer?
+A: When you need custom auth logic (e.g., non-AWS identity provider, special token validation).
+
+⚡ Gotcha
+lambda authorizer is Not for “authorizing Lambda directly.”
+It’s the gatekeeper at API Gateway.
+Response must return an IAM policy (Allow/Deny).
+
+
+Feature	Cognito Sync (Legacy)	AppSync
+Purpose	Sync user data/preferences across devices	Build GraphQL APIs for apps
+What it syncs	Key-value pairs (like settings, game scores)	Any app data from DynamoDB, Lambda, RDS, etc.
+Scope	Per-user data	App-wide data/API layer
+Backend	Uses Cognito Identity + datasets	Managed GraphQL service
+Status	Legacy / deprecated → replaced by AppSync	Actively supported, modern choice
