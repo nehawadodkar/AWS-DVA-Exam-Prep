@@ -1,0 +1,52 @@
+Explain how you will define highly available multi tier app in aws.
+  -  piblic subnet - Loadbalancer private subnet - instances with auto scaling group, and may be use another private subnet to host database or use mamaged database service based on the requirement. Chatgpt, xreate a correct answer based on this idea.
+
+NAT Gateway whats it ?
+- if you want to access internet from private subnet, then, chatgpt, explain in brief in a very easy to understan language that I can talk about tomorrow in interview. Explain with example. My application in private subnet wants to download from jfrog or github bla bla in simple language which i can explain in interview
+
+Can applications in different provate subnet talk to each other by default ?
+- yes . explain a bit chatgpt, so that i can remember and explain tomorrow in my interview
+
+What is NACL and SG
+  -   NACL is access control at subnet level. SG is at instance level. NACL is stateless. Need to configure inbound as well as outbound for a port. SG is stateful. If inbound is allowed, outbound is also allowed.
+
+What if an EC2 instance fails suddenly ? how will you troubleshoot ?
+  -   Will check cloudtrail and also will check if its a spot instance. 
+
+Where are some safe example usecases where spot instances can be used ?
+  - give me the answer to this chatgpt please.
+
+What if a lambda function fails randomly ? how will you fix the issue ?
+  - so, usually lambda function either makes http calls or calls an aws service. I will enable xray to trace the journey of that lambda function. Then, once I understand where there is a latency, I will try to increatse the retries and if that also does not work, I will try to increate timeout. If that also does not work, I will try to rewrite any logic that might be causing this.
+
+What will you do if the RDS storage is full ?
+  - First I will increate the storage / try to see if Ican use any ASG as an instance solution to solve the issue. NExt, I will see if there is a particular table, database or object tahts causing this and give it to the developers to analyze. Thirdly, I will create a cloudwatch metric to monitor when the storage is about to reach a threshhol.
+
+What will you do if a developer deletes a critical resources like S3, RDS, EC2 ?
+  -  I will try to recreate them from RDS snapshots, S3 prev version, EC2 AMI and so on. For longterm, I will enable IAM such that only DEvops Engineers are allowed to do so and that too via IAC terraform + GitHub workflows.
+
+Cost optimization example -
+  - tell how i created a lambda fucntion which runs on a schedule which finds which EBs volumes are not being used recently and delete them 
+
+
+EFS vs EBS 
+  - give me this answer Chatgpt. What I know - EFS is a NFS based elastic file system. concurrent r/w of data. sharable accross EC2 instances, EBS is a block storage dedicated to a single EC2 instance. I've heard something about EBS being used fot database instances for hgh throughput. 
+
+REal world usecase of STS 
+  - lambda function assuming a role to get access to dynamo db
+
+
+TERRAFORM
+
+for each vs for 
+  - for each for creating multiple instances of same service
+  - for is used for data transformation. looping through variable values just like a script
+
+Explain trust policy with example
+  - trust policy means who can assume this role.
+
+How can a lambda function on account A access dynamo DB in account b ?
+   - Create a role in B with policy to access dynamod DB. 
+   - Create a lambda function in A that assumes this role using STS
+   - Go to B again and add a trust policy to grant the lambda function permission to assume the role
+
